@@ -1,4 +1,3 @@
-
 var express = require('express');
 var mysql = require('mysql')
 var fs = require('fs');
@@ -32,7 +31,7 @@ function readConfig() {
     }
 
     if(el != -1) {
-      ret[el] = element.split(":")[1];
+      ret[el] = element.split(":")[1].trim();
     }
 
   });
@@ -53,10 +52,11 @@ var con = mysql.createConnection({
 
 con.connect(function(err) {
   if(err) {
-    console.log("Error connecting to database\nPrinting below:\n\t" + err);
+    console.log("Error connecting to database\n" + err);
   } else console.log("Database successfully connected");
 });
 
 app.listen(8080, function() {
   console.log("Started listening on port 8080");
 });
+
