@@ -1,13 +1,13 @@
-var express = require('express');
-var mysql = require('mysql')
-var fs = require('fs');
+var express = require("express");
+var mysql = require("mysql")
+var fs = require("fs");
 
 // reads the .config file in the current directory
 // returns an array with up to two elements
 // -- array[0] is the login in the config
 // -- array[1] is the password in the config
 function readConfig() {
-  var contents = fs.readFileSync('.config', 'utf8');
+  var contents = fs.readFileSync(".config", "utf8");
   var list = contents.split("\n");
   
   var ret = ["", "", "", ""] // dummy array
@@ -53,10 +53,21 @@ var con = mysql.createConnection({
 con.connect(function(err) {
   if(err) {
     console.log("Error connecting to database\n" + err);
-  } else console.log("Database successfully connected");
+  } else {
+    console.log("Database successfully connected");
+    con.query("SELECT * FROM playlists", function(err, row, fields) {
+      if(err.code == "ER_NO_SUCH_TABLE") {
+        var query = fs.readFileSync("create.sql", "utf8");
+	con.query(query, function(er, ro, field) {
+	  if(er) {
+	    console.log("Error applying create script!\n" + er);
+	  } else console.log("Successfully applied create script to database");
+	});
+      }
+    });
+  }
 });
 
 app.listen(8080, function() {
   console.log("Started listening on port 8080");
 });
-
