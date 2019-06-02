@@ -56,13 +56,16 @@ con.connect(function(err) {
   } else {
     console.log("Database successfully connected");
     con.query("SELECT * FROM playlists", function(err, row, fields) {
-      if(err.code == "ER_NO_SUCH_TABLE") {
+      if(err && err.code == "ER_NO_SUCH_TABLE") {
         var query = fs.readFileSync("create.sql", "utf8");
 	con.query(query, function(er, ro, field) {
 	  if(er) {
 	    console.log("Error applying create script!\n" + er);
 	  } else console.log("Successfully applied create script to database");
 	});
+      } else {
+	console.log("playlists already exists, printing below");
+	console.log(fields);
       }
     });
   }
