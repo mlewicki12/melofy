@@ -2,8 +2,9 @@
 # node files
 node_modules/
 
-# config file
+# config files
 .config
+.spotify
 
 # swap files
 *.swp
