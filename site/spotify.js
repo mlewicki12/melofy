@@ -11,6 +11,9 @@ var res = data.split('\n');
 var client_id = res[0];
 var client_secret = res[1];
 
+var access_token;
+var refresh_token;
+
 var redirect_uri = 'INVALID';
 
 var generateRandomString = function(length) {
@@ -85,10 +88,58 @@ exports.request = function(code, callback) {
 	console.log('sending post request to https://accounts.spotify.com/api/token');
 	request.post(authOptions, function(error, response, body) {
 		if (!error && response.statusCode === 200) {
+			access_token = body.access_token;
+			refresh_token = body.refresh_token;
+
 			callback(body.access_token, body.refresh_token);
 		} else {
 			console.log('error: ' + error);
 			callback(error, response.statusCode);
 		}
+	});
+}
+
+/**
+ * After getting spotify auth, we can make calls to Spotify API
+ * this returns a list of recommendations based on the params
+ *
+ * Returns something
+ * @param  {list} tracks  Seed tracks
+ * @param  {list} attr    Set attributes
+ * @return {stuff}
+ */
+exports.recommendations = function(tracks, attr) {
+	if(!access_token) {
+		console.log('invalid access token, user needs to login first')
+		return -1;
+	}
+
+	this.get( 'https://api.spotify.com/v1/recommendations?' +
+			queryString.stringify({
+				market: 'US',
+				seed_artists: tracks
+			}));
+}
+
+/**
+ * Makes a request to Spotify's API given a constructed object
+ *
+ * Returns the json body of the request
+ * @param  {object} options The body of the request
+ * @return {object} The json response
+ */
+exports.get = function(url) {
+	console.log('making request to spotify url ' + url);
+
+	var options = {
+		url: url,
+		headers: {
+			'Authorization': 'Bearer ' + access_token
+		},
+		json: true
+	};
+
+	request.get(options, function(error, response, body) {
+		console.log(body);
 	});
 }

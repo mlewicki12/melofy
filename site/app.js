@@ -45,10 +45,9 @@ function readConfig() {
   return ret;
 }
 
-var app = express();
-  app	.use(express.static('./public'))
-	.use(cors())
-	.use(cookieParser());
+var app = express().use(express.static('./public'))
+		   .use(cors())
+		   .use(cookieParser());
 
 var db = readConfig();
 var con = mysql.createConnection({
@@ -73,7 +72,7 @@ con.connect(function(err) {
 	});
       } else {
 	console.log('playlists already exists, printing below');
-	console.log(fields);
+	console.log(row);
       }
     });
   }
@@ -83,7 +82,7 @@ var stateKey = 'spotify_auth_state';
 spotify.init('http://localhost:8080/callback');
 
 app.get('/login', function(req, res) {
-	spotify.auth('playlist-modify-public', function(link, state) {
+	spotify.auth('playlist-modify-public playlist-modify-private', function(link, state) {
 		console.log(link);
 		res.cookie(stateKey, state);
 		res.redirect(link);
@@ -113,6 +112,10 @@ app.get('/callback', function(req, res) {
 		});
 	}
 
+});
+
+app.get('/recommendations', function(req, res) {
+	spotify.recommendations(req.query.track);
 });
 
 app.listen(8080, function() {
