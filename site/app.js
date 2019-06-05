@@ -115,7 +115,49 @@ app.get('/callback', function(req, res) {
 });
 
 app.get('/recommendations', function(req, res) {
-	spotify.recommendations(req.query.track);
+	// not doing anything with this atm
+	// ideally, instead of target_*, it'd become max_* + variance, min_* + variance
+	var variance = req.query.variance || 0.15;
+
+	// not sure how to create an object in js, lol
+	var attr = {
+		limit: 20
+	};
+
+	// still need to read through artists, tracks, and genres to ensure only five at a time are sent
+	var artists = [];
+	if(req.query.artists) {
+		artists = req.query.artists.split(',');
+		console.log(artists);
+	}
+
+	var tracks = [];
+	if(req.query.tracks) {
+		tracks = req.query.tracks.split(',');
+		console.log(tracks);
+	}
+	
+	var genres = [];
+	if(req.query.genres) {
+		genres = req.query.genres.split(',');
+		console.log(genres);
+	}
+
+	// check if each value exists in the query
+	var keys = ['limit', 'market', 'target_acousticness', 'target_danceability', 
+		    'target_duration_ms', 'target_energy', 'target_instrumentalness', 
+		    'target_key', 'target_liveness', 'target_loudness', 'target_mode', 
+		    'target_popularity', 'target_speechiness', 'target_tempo', 
+		    'target_valence'];
+
+	keys.forEach( function(element) {
+		if(req.query[element]) {
+			console.log('found ' + element + '=' + req.query[element] + ', adding to attr');
+			attr[element] = req.query[element];
+		}
+	});
+
+	console.log(queryString.stringify(attr));
 });
 
 //Use this endpoint to insert values into the playlists database
