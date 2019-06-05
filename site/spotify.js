@@ -104,8 +104,8 @@ exports.request = function(code, callback) {
  * this returns a list of recommendations based on the params
  *
  * Returns something
- * @param  {list} tracks  Seed tracks
- * @param  {list} attr    Set attributes
+ * @param  {list}   tracks  Seed tracks
+ * @param  {object} attr    Desired attributes
  * @return {stuff}
  */
 exports.recommendations = function(tracks, attr) {
@@ -114,18 +114,15 @@ exports.recommendations = function(tracks, attr) {
 		return -1;
 	}
 
-	this.get( 'https://api.spotify.com/v1/recommendations?' +
-			queryString.stringify({
-				market: 'US',
-				seed_artists: tracks
-			}));
+	this.get('https://api.spotify.com/v1/recommendations?' +
+			queryString.stringify(attr));
 }
 
 /**
  * Makes a request to Spotify's API given a constructed object
  *
  * Returns the json body of the request
- * @param  {object} options The body of the request
+ * @param  {object} url The spotify url
  * @return {object} The json response
  */
 exports.get = function(url) {
