@@ -118,11 +118,28 @@ app.get('/recommendations', function(req, res) {
 	spotify.recommendations(req.query.track);
 });
 
+//Use this endpoint to insert values into the playlists database
+//Url variables are pLink for playlist link and userid
+//No quotes around strings in url
 app.get('/insertplaylist', function(req, res) {
 	var pLink = req.query.pLink;
 	var userid = req.query.userid;
 	con.query("INSERT INTO playlists (link, userid) values ('" + pLink + "', '" + userid + "');");
 	res.end();
+	
+});
+
+app.get('/displayplaylist', function(req, res) {
+	var table = "<table>";
+	con.query('SELECT * from playlists' , function(err, rows, fields){
+			table += "<tr><th>ID</th><th>User ID</th><th>Playlist</th></tr>";
+			for (var i = 0; i < rows.length; i++){
+				table += "<tr><td>" + rows[i].id + "</td><td>" + rows[i].userid + "</td><td>" + rows[i].link +  "</td></tr>";
+			}
+			table += "</table>";
+			res.send(table);
+			res.end();
+	});
 	
 });
 
