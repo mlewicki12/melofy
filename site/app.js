@@ -118,6 +118,14 @@ app.get('/recommendations', function(req, res) {
 	spotify.recommendations(req.query.track);
 });
 
+app.get('/insertplaylist', function(req, res) {
+	var pLink = req.query.pLink;
+	var userid = req.query.userid;
+	con.query("INSERT INTO playlists (link, userid) values ('" + pLink + "', '" + userid + "');");
+	res.end();
+	
+});
+
 app.listen(8080, function() {
   console.log('Started listening on port 8080');
 });

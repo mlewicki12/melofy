@@ -1,9 +1,9 @@
 
 # name this file .config and throw it in the base directory with app.js
 # app.js reads this file for the following keys:
-host:
-user:
-password:
-database:
+host:localhost
+user:root
+password:password
+database:melofy
 
 # anything after the colon (:) gets passed in as a value, so no whitespace pls
