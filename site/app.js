@@ -82,7 +82,7 @@ var stateKey = 'spotify_auth_state';
 spotify.init('http://localhost:8080/callback');
 
 app.get('/login', function(req, res) {
-	spotify.auth('playlist-modify-public playlist-modify-private', function(link, state) {
+	spotify.auth('user-read-private user-read-birthdate playlist-modify-public playlist-modify-private', function(link, state) {
 		console.log(link);
 		res.cookie(stateKey, state);
 		res.redirect(link);
@@ -125,22 +125,10 @@ app.get('/recommendations', function(req, res) {
 	};
 
 	// still need to read through artists, tracks, and genres to ensure only five at a time are sent
-	var artists = [];
-	if(req.query.artists) {
-		artists = req.query.artists.split(',');
-		console.log(artists);
-	}
-
 	var tracks = [];
 	if(req.query.tracks) {
 		tracks = req.query.tracks.split(',');
 		console.log(tracks);
-	}
-	
-	var genres = [];
-	if(req.query.genres) {
-		genres = req.query.genres.split(',');
-		console.log(genres);
 	}
 
 	// check if each value exists in the query
@@ -158,6 +146,19 @@ app.get('/recommendations', function(req, res) {
 	});
 
 	console.log(queryString.stringify(attr));
+});
+
+app.get('/search', function(req, res) {
+	spotify.search(req.query.query, function(items) {
+		res.send(items);
+	});
+});
+
+
+app.get('/profile', function(req, res) {
+	spotify.profile(function(body) {
+		res.send(body);
+	});
 });
 
 //Use this endpoint to insert values into the playlists database

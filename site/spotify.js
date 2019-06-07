@@ -109,25 +109,54 @@ exports.request = function(code, callback) {
  * @return {stuff}
  */
 exports.recommendations = function(tracks, attr) {
-	if(!access_token) {
-		console.log('invalid access token, user needs to login first')
-		return -1;
-	}
-
 	this.get('https://api.spotify.com/v1/recommendations?' +
-			queryString.stringify(attr));
+			queryString.stringify(attr), function(body) {
+				
+			});
+}
+
+/**
+ * Search for tracks on Spotify
+ *
+ * Returns the json body of found tracks
+ * @param  {string} query    The search query
+ * @param  {func}   callback The function to call with the track data 
+ */
+exports.search = function(query, callback) {
+	this.get('https://api.spotify.com/v1/search?' +
+			queryString.stringify({
+				q: query,
+				type: 'track',
+				limit: 10
+			}), function(body) {
+				callback(body.tracks.items);
+			});
+}
+
+/**
+ * Get the current user's Spotify profile
+ * @param {func} callback The function to call with user data
+ */
+exports.profile = function(callback) {
+	this.get('https://api.spotify.com/v1/me', function(body) {
+		callback(body);
+	});
 }
 
 /**
  * Makes a request to Spotify's API given a constructed object
  *
  * Returns the json body of the request
- * @param  {object} url The spotify url
- * @return {object} The json response
+ * @param  {object} url      The spotify url
+ * @param  {func}   callback The function to call after getting the data
  */
-exports.get = function(url) {
-	console.log('making request to spotify url ' + url);
+exports.get = function(url, callback) {
+	if(!access_token) {
+		console.log('invalid access token, user needs to login first')
+		return -1;
+	}
 
+	console.log('making request to spotify url ' + url);
 	var options = {
 		url: url,
 		headers: {
@@ -137,6 +166,15 @@ exports.get = function(url) {
 	};
 
 	request.get(options, function(error, response, body) {
+		if(error) {
+			console.log('encountered error: ' + error);
+			console.log(response);
+			return -1;
+		}
+
+		console.log('received response');
 		console.log(body);
+
+		callback(body);
 	});
 }
