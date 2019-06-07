@@ -88,13 +88,14 @@ exports.request = function(code, callback) {
 	console.log('sending post request to https://accounts.spotify.com/api/token');
 	request.post(authOptions, function(error, response, body) {
 		if (!error && response.statusCode === 200) {
+			console.log('received access tokens, redirecting');
 			access_token = body.access_token;
 			refresh_token = body.refresh_token;
 
-			callback(body.access_token, body.refresh_token);
+			callback(false, body.access_token, body.refresh_token);
 		} else {
 			console.log('error: ' + error);
-			callback(error, response.statusCode);
+			callback(true, error, response.statusCode);
 		}
 	});
 }

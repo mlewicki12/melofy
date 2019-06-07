@@ -95,6 +95,8 @@ app.get('/login', function(req, res) {
 /*
  * Spotify callback info
  * Not used in this project
+ *
+ * Redirects to index
  */
 app.get('/callback', function(req, res) {
 	var code 	= req.query.code  || null;
@@ -103,19 +105,17 @@ app.get('/callback', function(req, res) {
 
 	if(state === null || state !== storedState) {
 		console.log('state mismatch error\n' + state + ' : ' + storedState);
-		res.redirect('/#' +
-			queryString.stringify({
-				error: 'state-mismatch'
-			}));
+		res.redirect('./error?err=state-mismatch');
 	} else {
-		spotify.request(code, function(acc, ref) {
+		spotify.request(code, function(err, acc, ref) {
+			if(err) {
+				res.redirect('./error?err=' + acc + '&st=' + ref); 
+				return;
+			}
+
 			console.log('received access token ' + acc);
 			console.log('received refresh token ' + ref);
-			res.redirect('/#' +
-				queryString.stringify({
-					access_token: acc,
-					refresh_token: ref
-				}));
+			res.redirect('./');
 		});
 	}
 
@@ -178,6 +178,16 @@ app.get('/search', function(req, res) {
 	});
 });
 
+/*
+ * Print out an error for the user
+ */
+app.get('/error', function(req, res) {
+	if(req.query.st) {
+		res.send('error ' + req.query.st + ': ' + req.query.err);
+	}
+
+	res.send('error: ' + req.query.err);
+});
 
 /*
  * Get the user's profile info
