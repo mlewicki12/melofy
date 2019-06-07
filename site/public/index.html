@@ -31,7 +31,6 @@
       function toggle() {
         $('.loggedin').toggleClass('show');
         $('.login').toggleClass('hide');
-
       }
     </script>
   </head>
@@ -62,7 +61,9 @@
             </div>
           </div>
           <div class="login">
-            <button type="button" class="btn btn-secondary thePink" onclick="toggle()">Login</button>
+            <a href="http://localhost:8080/login">
+              <button type="button" class="btn btn-secondary thePink" onclick="toggle()">Login</button>
+            </a>
           </div>
         </div>
       </div<
