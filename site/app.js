@@ -166,7 +166,13 @@ app.get('/recommendations', function(req, res) {
 app.get('/insertplaylist', function(req, res) {
 	var pLink = req.query.pLink;
 	var userid = req.query.userid;
-	con.query("INSERT INTO playlists (link, userid) values ('" + pLink + "', '" + userid + "');");
+	if(/https:\/\/open.spotify.com\/*/.test(pLink)){
+		con.query("INSERT INTO playlists (link, userid) values ('" + pLink + "', '" + userid + "');");
+	}
+	else {
+		console.log("Link is invalid.");
+	}
+	
 	res.end();
 	
 });
