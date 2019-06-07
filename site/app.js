@@ -81,6 +81,9 @@ con.connect(function(err) {
 var stateKey = 'spotify_auth_state';
 spotify.init('http://localhost:8080/callback');
 
+/*
+ * Login to Spotify
+ */
 app.get('/login', function(req, res) {
 	spotify.auth('user-read-private user-read-birthdate playlist-modify-public playlist-modify-private', function(link, state) {
 		console.log(link);
@@ -89,6 +92,10 @@ app.get('/login', function(req, res) {
 	});
 });
 
+/*
+ * Spotify callback info
+ * Not used in this project
+ */
 app.get('/callback', function(req, res) {
 	var code 	= req.query.code  || null;
 	var state	= req.query.state || null;
@@ -114,6 +121,17 @@ app.get('/callback', function(req, res) {
 
 });
 
+/*
+ * Get a set of recommendations
+ *
+ * URL paraments
+ * @param  {string} variance Unused right now, modify between target_ and max_min values
+ * @param  {string} tracks   A comma separated list of tracks
+ * @param  {string} limit    Amount of tracks to search for, between 1 to 100
+ * @param  {string} market   Destination market country code
+ * @param  {string} target_* Attribute values, between 0 to 1
+ * @return {json}   The list of recommendations
+ */
 app.get('/recommendations', function(req, res) {
 	// not doing anything with this atm
 	// ideally, instead of target_*, it'd become max_* + variance, min_* + variance
@@ -148,6 +166,12 @@ app.get('/recommendations', function(req, res) {
 	console.log(queryString.stringify(attr));
 });
 
+/*
+ * Search for a song given a query
+ *
+ * @param  {string} query The query to search for, spaces formatted to %20
+ * @return {json}   The returned list of tracks
+ */
 app.get('/search', function(req, res) {
 	spotify.search(req.query.query, function(items) {
 		res.send(items);
@@ -155,23 +179,36 @@ app.get('/search', function(req, res) {
 });
 
 
+/*
+ * Get the user's profile info
+ *
+ * @return {json} The user's profile
+ */
 app.get('/profile', function(req, res) {
 	spotify.profile(function(body) {
 		res.send(body);
 	});
 });
 
-//Use this endpoint to insert values into the playlists database
-//Url variables are pLink for playlist link and userid
-//No quotes around strings in url
+/*
+ * Insert playlists into console
+ *
+ * @param {string} link Playlist link
+ * @param {string} user User's id
+ */
 app.get('/insertplaylist', function(req, res) {
-	var pLink = req.query.pLink;
-	var userid = req.query.userid;
+	var pLink = req.query.link;
+	var userid = req.query.user;
 	con.query("INSERT INTO playlists (link, userid) values ('" + pLink + "', '" + userid + "');");
 	res.end();
 	
 });
 
+/*
+ * Get all playlists
+ *
+ * @return {html} The constructed html table
+ */
 app.get('/displayplaylist', function(req, res) {
 	var table = "<table>";
 	con.query('SELECT * from playlists' , function(err, rows, fields){
