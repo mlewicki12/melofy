@@ -23,6 +23,7 @@
 
 <html>
   <head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -31,17 +32,40 @@
     <title>Playlist Generator</title>
 
     <meta charset="UTF-8">
+
+    <script type="text/javascript">
+
+      $(document).ready(function(){
+        $("input").change(function(){
+          console.log("Works!! " + document.getElementById("search").value);
+        });
+      });
+
+      //var URL = "";         //URL
+
+      /*$.ajax({
+        type: "GET",
+        url : URL,
+        dataType : "html",
+        success : function(msg){
+          document.getElementById("songlist").innerHTML = msg;  //results
+        },
+        error: function(){
+          console.log("ERROR");               //error
+        }
+      });*/
+    </script>
   </head>
 
   <body>
     <div class="jumbotron text-center">
       <h1 style="color: #f48fb1">Playlist Generator</h1>
-      <p>Bottom text. </p>
+      <p>Bottom text.</p>
     </div>
 
     <!-- Search form -->
     <div class="active-pink-3 active-pink-4 mb-4" style="width:33.33%; justify-content:center">
-      <input class="form-control" type="text" placeholder="Search" aria-label="Search">
+      <input class="form-control" type="text" placeholder="Search" aria-label="Search" id="search">
     </div>
 
     <div id="seedsongs">
