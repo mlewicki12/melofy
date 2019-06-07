@@ -121,7 +121,6 @@ exports.recommendations = function(tracks, attr) {
  * Returns the json body of found tracks
  * @param  {string} query    The search query
  * @param  {func}   callback The function to call with the track data 
- * @return {stuff}
  */
 exports.search = function(query, callback) {
 	this.get('https://api.spotify.com/v1/search?' +
@@ -135,12 +134,21 @@ exports.search = function(query, callback) {
 }
 
 /**
+ * Get the current user's Spotify profile
+ * @param {func} callback The function to call with user data
+ */
+exports.profile = function(callback) {
+	this.get('https://api.spotify.com/v1/me', function(body) {
+		callback(body);
+	});
+}
+
+/**
  * Makes a request to Spotify's API given a constructed object
  *
  * Returns the json body of the request
  * @param  {object} url      The spotify url
- * @param  {func}   callback 
- * @return {object} The json response
+ * @param  {func}   callback The function to call after getting the data
  */
 exports.get = function(url, callback) {
 	if(!access_token) {

@@ -82,7 +82,7 @@ var stateKey = 'spotify_auth_state';
 spotify.init('http://localhost:8080/callback');
 
 app.get('/login', function(req, res) {
-	spotify.auth('playlist-modify-public playlist-modify-private', function(link, state) {
+	spotify.auth('user-read-private user-read-birthdate playlist-modify-public playlist-modify-private', function(link, state) {
 		console.log(link);
 		res.cookie(stateKey, state);
 		res.redirect(link);
@@ -151,6 +151,13 @@ app.get('/recommendations', function(req, res) {
 app.get('/search', function(req, res) {
 	spotify.search(req.query.query, function(items) {
 		res.send(items);
+	});
+});
+
+
+app.get('/profile', function(req, res) {
+	spotify.profile(function(body) {
+		res.send(body);
 	});
 });
 
