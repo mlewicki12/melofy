@@ -8,10 +8,6 @@ var cookieParser = require('cookie-parser');
 
 var spotify = require('./spotify');
 
-// reads the .config file in the current directory
-// returns an array with up to two elements
-// -- array[0] is the login in the config
-// -- array[1] is the password in the config
 /**
  * Checks env variables for database settings - SPOTIFY_HOST, SPOTIFY_USER, SPOTIFY_PASS, SPOTIFY_DB
  * Falls back on .config in the current directory for db values
@@ -153,6 +149,13 @@ app.get('/callback', function(req, res) {
 
 });
 
+/**
+ * Check if there's a user logged in
+ */
+app.get('/logged', function(req, res) {
+	res.send(spotify.logged());
+});
+
 /*
  * Get a set of recommendations
  *
@@ -169,7 +172,7 @@ app.get('/recommendations', function(req, res) {
 	// ideally, instead of target_*, it'd become max_* + variance, min_* + variance
 	var variance = req.query.variance || 0.15;
 
-	// not sure how to create an object in js, lol
+	// not sure how to create an object in js lol
 	var attr = {
 		limit: 20
 	};
@@ -266,6 +269,11 @@ app.get('/insertplaylist', function(req, res) {
 app.get('/displayplaylist', function(req, res) {
 	var table = "<table>";
 	con.query('SELECT * from playlists' , function(err, rows, fields){
+			if(err) {
+				console.log('encountered error while accessing database!\n' + err);
+				return -1;
+			}
+
 			table += "<tr><th>ID</th><th>User ID</th><th>Playlist</th></tr>";
 			for (var i = 0; i < rows.length; i++){
 				table += "<tr><td>" + rows[i].id + "</td><td>" + rows[i].userid + "</td><td>" + rows[i].link +  "</td></tr>";
