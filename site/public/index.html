@@ -72,11 +72,28 @@
        console.log("access on index: " + Cookies.get('access'))
        console.log("refresh on index: " + Cookies.get('refresh'))
 
+       function profileRequest() {
+          $.ajax({
+            type: "GET",
+            url: './profile?access=' + Cookies.get('access'), //creating the url used for the request
+            contentType: "application/json; charset=utf-8",
+            data: "{}",
+            dataType: "html",
+            success: function(msg) {
+              console.log(msg);
+            },
+            error: function(xhr, ajaxOptions, thrownError) {
+              console.log('Error in getting profile data.')
+            }
+          });
+       }
+
        function toggle() {
          if (Cookies.get('access') != 'undefined') {
           $('.loggedin').toggleClass('show');
           $('.login').toggleClass('hide');
-        }
+          profileRequest();
+         }
        }
 
        function getQuote()
