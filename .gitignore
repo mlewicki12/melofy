@@ -9,3 +9,5 @@ node_modules/
 # swap files
 *.swp
 
+# mac files
+.DS_STORE

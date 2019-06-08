@@ -1,0 +1,31 @@
+
+@font-face {
+	font-family: "Pseudolux";
+	src: url("fonts/pseudolux.ttf") format("truetype");
+}
+
+.loggedin {display: none;}
+.login {display: block;}
+
+.show {display: block;}
+.hide {display: none;}
+
+.textPrimary {color: white;}
+.background1 {background-color: black;}
+.thePink {background-color: #F48FB1;}
+
+.header {
+	color: #F48FB1;
+	font-family: "Pseudolux", Arial, sans;
+	font-size: 8em;
+	letter-spacing: -10px;
+	text-shadow: 0px 0px 3px #dddddd;
+
+.btn {
+	width: 33.33%;
+	padding: 5px;
+}
+
+body {
+	text-align: center;
+}
