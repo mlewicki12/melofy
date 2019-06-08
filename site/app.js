@@ -182,23 +182,33 @@ app.get('/recommendations', function(req, res) {
 	if(req.query.tracks) {
 		tracks = req.query.tracks.split(',');
 		console.log(tracks);
+
+		attr.seed_tracks = '';
+		tracks.forEach( function(element) {
+			attr.seed_tracks += element + ',';
+		});
 	}
 
 	// check if each value exists in the query
-	var keys = ['limit', 'market', 'target_acousticness', 'target_danceability', 
-		    'target_duration_ms', 'target_energy', 'target_instrumentalness', 
-		    'target_key', 'target_liveness', 'target_loudness', 'target_mode', 
-		    'target_popularity', 'target_speechiness', 'target_tempo', 
-		    'target_valence'];
+	var keys = ['acousticness', 'danceability', 
+		    'duration_ms', 'energy', 'instrumentalness', 
+		    'key', 'liveness', 'loudness', 'mode', 
+		    'popularity', 'speechiness', 'tempo', 
+		    'valence'];
+
+	if(req.query.limit) attr.limit = req.query.limit;
+	if(req.query.market) attr.market = req.query.market;
 
 	keys.forEach( function(element) {
 		if(req.query[element]) {
 			console.log('found ' + element + '=' + req.query[element] + ', adding to attr');
-			attr[element] = req.query[element];
+			attr['target_' + element] = req.query[element];
 		}
 	});
 
-	console.log(queryString.stringify(attr));
+	spotify.recommendations(attr, function(body) {
+		res.send(body);
+	});
 });
 
 /*

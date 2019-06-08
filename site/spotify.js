@@ -141,15 +141,12 @@ exports.request = function(code, callback) {
  * this returns a list of recommendations based on the params
  *
  * Returns something
- * @param  {list}   tracks  Seed tracks
- * @param  {object} attr    Desired attributes
- * @return {stuff}
+ * @param  {object} attr     Desired attributes
+ * @param  {func}   callback Function to call with the result of the request
  */
-exports.recommendations = function(tracks, attr) {
+exports.recommendations = function(attr, callback) {
 	this.get('https://api.spotify.com/v1/recommendations?' +
-			queryString.stringify(attr), function(body) {
-				
-			});
+			queryString.stringify(attr), callback);
 }
 
 /**
