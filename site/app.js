@@ -243,6 +243,10 @@ app.get('/displayplaylist', function(req, res) {
 	
 });
 
-app.listen(8080, function() {
-  console.log('Started listening on port 8080');
+var port = 8080;
+if(process.env.PORT) {
+	port = process.env.PORT;
+}
+app.listen(port, function() {
+  console.log('Started listening on port ' + port);
 });

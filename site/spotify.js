@@ -5,11 +5,34 @@ var queryString 	= require('querystring');
 var cookieParser 	= require('cookie-parser');
 var request		= require('request');
 
-var data = fs.readFileSync('./.spotify', 'utf-8');
-var res = data.split('\n');
+exports.client_id = '';
+exports.client_secret = '';
 
-var client_id = res[0];
-var client_secret = res[1];
+/**
+ * Get Spotify client id and secret
+ * Checks environment variables SPOTIFY_ID and SPOTIFY_SECRET first, then falls back on .spotify file
+ * Values get cached into client_id and client_secret
+ *
+ * @return {array} An array with the client id at index 0 and client secret at index 1
+ */
+exports.info = function() {
+	if(process.env.SPOTIFY_ID && process.env.SPOTIFY_SECRET) {
+		this.client_id = process.env.SPOTIFY_ID;
+		this.client_secret = process.env.SPOTIFY_SECRET;
+		return [this.client_id, this.client_secret];
+	}
+
+	var data = fs.readFileSync('./.spotify', 'utf-8');
+	var res = data.split('\n');
+
+	this.client_id = res[0];
+	this.client_secret = res[1];
+	return res;
+}
+
+this.info();
+console.log('received values for client_id and client_secret, printing client_id below');
+console.log(this.client_id);
 
 var access_token;
 var refresh_token;
