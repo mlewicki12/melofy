@@ -69,8 +69,8 @@
            refresh_token = params.refresh;
        Cookies.set('access', access_token)
        Cookies.set('refresh', refresh_token)
-       console.log(Cookies.get('access'))
-       console.log(Cookies.get('refresh'))
+       console.log("access on index: " + Cookies.get('access'))
+       console.log("refresh on index: " + Cookies.get('refresh'))
 
        function toggle() {
          if (Cookies.get('access') != 'undefined') {

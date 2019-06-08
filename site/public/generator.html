@@ -9,11 +9,11 @@
     box-shadow: 0 0 0 1px #f48fb1;
   }
   .form-control{
-    position:relative; 
+    position:relative;
     left:100%;
   }
   #songlist, #seedsongs, #attributes{
-    position:relative; 
+    position:relative;
     left:33.33%;
   }
   th{
@@ -51,18 +51,23 @@
         console.log("search request");
       }
 
+      console.log("access is: " + Cookies.get('access'))
+      console.log("refresh is: " + Cookies.get('refresh'))
+
+
+
       /*$(document).ready(function(){
         $("input").change(function(){
-		  
+
           console.log("Works!! " + document.getElementById("search").value);
 		  var URL =  "http://localhost:8080/recommendations";
-		  
+
 		  var table = document.getElementById("seedsongs");
 		  var trs = table.getElementByTagName("tr");
 		  for (var i =0; i< trs.length; i++){
 			console.log(trs[i]);
 		  }
-		  
+
 		  /*
 		  $.ajax({
 			type: "GET",
@@ -76,7 +81,7 @@
 			}
 		});
 		*/
-		  
+
         });
       });*/
 
@@ -93,9 +98,9 @@
           console.log("ERROR");               //error
         }
       });*/
-	  
-	  
-	  
+
+
+
     </script>
   </head>
 
