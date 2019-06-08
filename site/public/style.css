@@ -5,7 +5,11 @@
 }
 
 .loggedin {display: none;}
-.login {display: block;}
+.login {
+	display: block;
+	margin: auto;
+	width: 25%;
+}
 
 .show {display: block;}
 .hide {display: none;}
@@ -20,9 +24,10 @@
 	font-size: 8em;
 	letter-spacing: -10px;
 	text-shadow: 0px 0px 3px #dddddd;
+}
 
 .btn {
-	width: 33.33%;
+	width: 100%;
 	padding: 5px;
 }
 
