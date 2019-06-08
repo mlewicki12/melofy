@@ -156,7 +156,7 @@ app.get('/callback', function(req, res) {
 /*
  * Get a set of recommendations
  *
- * URL paraments
+ * URL parameters
  * @param  {string} variance Unused right now, modify between target_ and max_min values
  * @param  {string} tracks   A comma separated list of tracks
  * @param  {string} limit    Amount of tracks to search for, between 1 to 100
