@@ -4,7 +4,8 @@
   "description": "stuff",
   "main": "app.js",
   "scripts": {
-    "test": "node app.js"
+    "test": "node app.js",
+    "start": "node ./site/app.js"
   },
   "repository": {
     "type": "git",
