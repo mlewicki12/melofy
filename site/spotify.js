@@ -1,7 +1,7 @@
 `use strict`
 
 var fs 			= require('fs');
-var queryString 	= require('queryString');
+var queryString 	= require('querystring');
 var cookieParser 	= require('cookie-parser');
 var request		= require('request');
 
