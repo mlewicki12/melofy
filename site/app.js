@@ -137,13 +137,13 @@ app.get('/callback', function(req, res) {
 	} else {
 		spotify.request(code, function(err, acc, ref) {
 			if(err) {
-				res.redirect('./error?err=' + acc + '&st=' + ref); 
+				res.redirect('./error?err=' + acc + '&st=' + ref);
 				return;
 			}
 
 			console.log('received access token ' + acc);
 			console.log('received refresh token ' + ref);
-			res.redirect('./?access=' + acc + '&refresh=' + ref);
+			res.redirect('./#access=' + acc + '&refresh=' + ref);
 		});
 	}
 
@@ -193,10 +193,10 @@ app.get('/recommendations', function(req, res) {
 	}
 
 	// check if each value exists in the query
-	var keys = ['acousticness', 'danceability', 
-		    'duration_ms', 'energy', 'instrumentalness', 
-		    'key', 'liveness', 'loudness', 'mode', 
-		    'popularity', 'speechiness', 'tempo', 
+	var keys = ['acousticness', 'danceability',
+		    'duration_ms', 'energy', 'instrumentalness',
+		    'key', 'liveness', 'loudness', 'mode',
+		    'popularity', 'speechiness', 'tempo',
 		    'valence'];
 
 	if(req.query.limit) attr.limit = req.query.limit;
@@ -271,9 +271,9 @@ app.get('/insertplaylist', function(req, res) {
 	else {
 		console.log("Link is invalid.");
 	}
-	
+
 	res.end();
-	
+
 });
 
 /*
@@ -297,7 +297,7 @@ app.get('/displayplaylist', function(req, res) {
 			res.send(table);
 			res.end();
 	});
-	
+
 });
 
 var port = 8080;
