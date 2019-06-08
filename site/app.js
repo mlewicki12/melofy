@@ -70,6 +70,7 @@ if(process.env.SPOTIFY_SITE) {
 	pblc = process.env.SPOTIFY_SITE;
 }
 
+console.log('serving public files from ' + pblc);
 var app = express().use(express.static(pblc))
 		   .use(cors())
 		   .use(cookieParser());
