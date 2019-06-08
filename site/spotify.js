@@ -61,6 +61,19 @@ exports.init = function(callback) {
 }
 
 /**
+ * Check if we have a user logged in
+ *
+ * @return {bool} True if there's a logged in user
+ */
+exports.logged = function() {
+	if(access_token && refresh_token) {
+		return true;
+	}
+
+	return false;
+}
+
+/**
  * First step to get Spotify auth
  * Called when users GET request /login
  *
