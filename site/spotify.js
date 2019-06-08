@@ -77,7 +77,7 @@ exports.auth = function(scope, callback) {
 	callback('https://accounts.spotify.com/authorize?' +
 		queryString.stringify({
 			response_type: 'code',
-			client_id: client_id,
+			client_id: this.client_id,
 			scope: scope,
 			redirect_uri: redirect_uri,
 			state: state
@@ -103,7 +103,7 @@ exports.request = function(code, callback) {
 			grant_type: 'authorization_code'
 		},
 		headers: {
-			'Authorization': 'Basic ' + (new Buffer(client_id + ':' + client_secret).toString('base64'))
+			'Authorization': 'Basic ' + (new Buffer(this.client_id + ':' + this.client_secret).toString('base64'))
 		},
 		json: true
 	};
