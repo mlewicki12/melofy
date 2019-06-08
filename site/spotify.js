@@ -34,9 +34,6 @@ this.info();
 console.log('received values for client_id and client_secret');
 console.log('client id value ' + this.client_id);
 
-var access_token;
-var refresh_token;
-
 var redirect_uri = 'INVALID';
 
 var generateRandomString = function(length) {
@@ -58,19 +55,6 @@ var generateRandomString = function(length) {
 exports.init = function(callback) {
 	redirect_uri = callback;
 	console.log('set redirect page to ' + redirect_uri);
-}
-
-/**
- * Check if we have a user logged in
- *
- * @return {bool} True if there's a logged in user
- */
-exports.logged = function() {
-	if(access_token && refresh_token) {
-		return true;
-	}
-
-	return false;
 }
 
 /**
@@ -125,9 +109,6 @@ exports.request = function(code, callback) {
 	request.post(authOptions, function(error, response, body) {
 		if (!error && response.statusCode === 200) {
 			console.log('received access tokens, redirecting');
-			access_token = body.access_token;
-			refresh_token = body.refresh_token;
-
 			callback(false, body.access_token, body.refresh_token);
 		} else {
 			console.log('error: ' + error);
@@ -142,11 +123,12 @@ exports.request = function(code, callback) {
  *
  * Returns something
  * @param  {object} attr     Desired attributes
+ * @param  {string} access   The access key
  * @param  {func}   callback Function to call with the result of the request
  */
-exports.recommendations = function(attr, callback) {
+exports.recommendations = function(attr, access, callback) {
 	this.get('https://api.spotify.com/v1/recommendations?' +
-			queryString.stringify(attr), callback);
+			queryString.stringify(attr), access, callback);
 }
 
 /**
@@ -154,25 +136,27 @@ exports.recommendations = function(attr, callback) {
  *
  * Returns the json body of found tracks
  * @param  {string} query    The search query
+ * @param  {string} access   The access key
  * @param  {func}   callback The function to call with the track data 
  */
-exports.search = function(query, callback) {
+exports.search = function(query, access, callback) {
 	this.get('https://api.spotify.com/v1/search?' +
 			queryString.stringify({
 				q: query,
 				type: 'track',
 				limit: 10
-			}), function(body) {
+			}), access, function(body) {
 				callback(body.tracks.items);
 			});
 }
 
 /**
  * Get the current user's Spotify profile
- * @param {func} callback The function to call with user data
+ * @param {string} access   The access key
+ * @param {func}   callback The function to call with user data
  */
-exports.profile = function(callback) {
-	this.get('https://api.spotify.com/v1/me', function(body) {
+exports.profile = function(access, callback) {
+	this.get('https://api.spotify.com/v1/me', access, function(body) {
 		callback(body);
 	});
 }
@@ -182,10 +166,11 @@ exports.profile = function(callback) {
  *
  * Returns the json body of the request
  * @param  {object} url      The spotify url
+ * @param  {string} access   The access token
  * @param  {func}   callback The function to call after getting the data
  */
-exports.get = function(url, callback) {
-	if(!access_token) {
+exports.get = function(url, access, callback) {
+	if(!access) {
 		console.log('invalid access token, user needs to login first')
 		return -1;
 	}
@@ -194,7 +179,7 @@ exports.get = function(url, callback) {
 	var options = {
 		url: url,
 		headers: {
-			'Authorization': 'Bearer ' + access_token
+			'Authorization': 'Bearer ' + access
 		},
 		json: true
 	};
