@@ -259,12 +259,14 @@ app.get('/profile', function(req, res) {
 app.get('/insertplaylist', function(req, res) {
 	var pLink = req.query.link;
 	var userid = req.query.user;
-	con.query("INSERT INTO playlists (link, userid) values ('" + pLink + "', '" + userid + "');");
+	//con.query("INSERT INTO playlists (link, userid) values ('" + pLink + "', '" + userid + "');");
 
 	var pLink = req.query.pLink;
 	var userid = req.query.userid;
 	if(/https:\/\/open.spotify.com\/*/.test(pLink)){
-		con.query("INSERT INTO playlists (link, userid) values ('" + pLink + "', '" + userid + "');");
+		queryString = "INSERT INTO playlists (link, userid) values ('" + pLink + "', '" + userid + "');"
+		con.query(queryString);
+		console.log(queryString);
 	}
 	else {
 		console.log("Link is invalid.");
