@@ -53,7 +53,30 @@
 
       /*$(document).ready(function(){
         $("input").change(function(){
+		  
           console.log("Works!! " + document.getElementById("search").value);
+		  var URL =  "http://localhost:8080/recommendations";
+		  
+		  var table = document.getElementById("seedsongs");
+		  var trs = table.getElementByTagName("tr");
+		  for (var i =0; i< trs.length; i++){
+			console.log(trs[i]);
+		  }
+		  
+		  /*
+		  $.ajax({
+			type: "GET",
+			url : URL,
+			dataType : "html",
+			success : function(msg){
+			  document.getElementById("songlist").innerHTML = msg;  //results
+			},
+			error: function(){
+			  console.log("ERROR");               //error
+			}
+		});
+		*/
+		  
         });
       });*/
 
@@ -71,18 +94,8 @@
         }
       });*/
 	  
-	  function recommendationsCall(){
-		*$.ajax({
-        type: "GET",
-        url : URL,
-        dataType : "html",
-        success : function(msg){
-          document.getElementById("songlist").innerHTML = msg;  //results
-        },
-        error: function(){
-          console.log("ERROR Recommendationscall");               //error
-        }
-	  }
+	  
+	  
     </script>
   </head>
 
@@ -103,13 +116,19 @@
           <th>Seed Songs</th>
         </tr>
         <tr>
-          <td>Test</td>
+          <td>Song1</td>
         </tr>
         <tr>
-          <td>Test</td>
+          <td>Song2</td>
         </tr>
         <tr>
-          <td>Test</td>
+          <td>Song3</td>
+        </tr>
+		<tr>
+          <td>Song4</td>
+        </tr>
+		<tr>
+          <td>Song5</td>
         </tr>
       </table>
     </div>
