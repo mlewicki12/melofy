@@ -35,11 +35,27 @@
 
     <script type="text/javascript">
 
-      $(document).ready(function(){
+      var interval = null;
+
+      function initSearch(state){
+        if (state == 1){
+          interval = setInterval(search, 1000);
+        }
+        else{
+          clearInterval(interval);
+          search();
+        }
+      }
+
+      function search(){
+        console.log("search request");
+      }
+
+      /*$(document).ready(function(){
         $("input").change(function(){
           console.log("Works!! " + document.getElementById("search").value);
         });
-      });
+      });*/
 
       //var URL = "";         //URL
 
@@ -78,7 +94,7 @@
 
     <!-- Search form -->
     <div class="active-pink-3 active-pink-4 mb-4" style="width:33.33%; justify-content:center">
-      <input class="form-control" type="text" placeholder="Search" aria-label="Search" id="search">
+      <input class="form-control" type="text" placeholder="Search" aria-label="Search" id="search" onfocus="initSearch(1)" onfocusout="initSearch(2)">
     </div>
 
     <div id="seedsongs">
