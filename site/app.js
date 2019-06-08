@@ -143,7 +143,7 @@ app.get('/callback', function(req, res) {
 
 			console.log('received access token ' + acc);
 			console.log('received refresh token ' + ref);
-			res.redirect('./');
+			res.redirect('./?access=' + acc + '&refresh=' + ref);
 		});
 	}
 
@@ -160,6 +160,7 @@ app.get('/logged', function(req, res) {
  * Get a set of recommendations
  *
  * URL parameters
+ * @param  {string} access   The access token
  * @param  {string} variance Unused right now, modify between target_ and max_min values
  * @param  {string} tracks   A comma separated list of tracks
  * @param  {string} limit    Amount of tracks to search for, between 1 to 100
@@ -172,6 +173,8 @@ app.get('/recommendations', function(req, res) {
 	// ideally, instead of target_*, it'd become max_* + variance, min_* + variance
 	var variance = req.query.variance || 0.15;
 
+	var access = req.query.access;
+
 	// not sure how to create an object in js lol
 	var attr = {
 		limit: 20
@@ -182,33 +185,44 @@ app.get('/recommendations', function(req, res) {
 	if(req.query.tracks) {
 		tracks = req.query.tracks.split(',');
 		console.log(tracks);
+
+		attr.seed_tracks = '';
+		tracks.forEach( function(element) {
+			attr.seed_tracks += element + ',';
+		});
 	}
 
 	// check if each value exists in the query
-	var keys = ['limit', 'market', 'target_acousticness', 'target_danceability', 
-		    'target_duration_ms', 'target_energy', 'target_instrumentalness', 
-		    'target_key', 'target_liveness', 'target_loudness', 'target_mode', 
-		    'target_popularity', 'target_speechiness', 'target_tempo', 
-		    'target_valence'];
+	var keys = ['acousticness', 'danceability', 
+		    'duration_ms', 'energy', 'instrumentalness', 
+		    'key', 'liveness', 'loudness', 'mode', 
+		    'popularity', 'speechiness', 'tempo', 
+		    'valence'];
+
+	if(req.query.limit) attr.limit = req.query.limit;
+	if(req.query.market) attr.market = req.query.market;
 
 	keys.forEach( function(element) {
 		if(req.query[element]) {
 			console.log('found ' + element + '=' + req.query[element] + ', adding to attr');
-			attr[element] = req.query[element];
+			attr['target_' + element] = req.query[element];
 		}
 	});
 
-	console.log(queryString.stringify(attr));
+	spotify.recommendations(attr, access, function(body) {
+		res.send(body);
+	});
 });
 
 /*
  * Search for a song given a query
  *
- * @param  {string} query The query to search for, spaces formatted to %20
+ * @param  {string} query  The query to search for, spaces formatted to %20
+ * @param  {string} access The access code
  * @return {json}   The returned list of tracks
  */
 app.get('/search', function(req, res) {
-	spotify.search(req.query.query, function(items) {
+	spotify.search(req.query.query, req.query.access, function(items) {
 		res.send(items);
 	});
 });
@@ -227,10 +241,11 @@ app.get('/error', function(req, res) {
 /*
  * Get the user's profile info
  *
- * @return {json} The user's profile
+ * @param  {string} access The access code
+ * @return {json}   The user's profile
  */
 app.get('/profile', function(req, res) {
-	spotify.profile(function(body) {
+	spotify.profile(req.query.access, function(body) {
 		res.send(body);
 	});
 });
@@ -289,6 +304,7 @@ var port = 8080;
 if(process.env.PORT) {
 	port = process.env.PORT;
 }
+
 app.listen(port, function() {
   console.log('Started listening on port ' + port);
 });
