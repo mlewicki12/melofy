@@ -12,37 +12,57 @@ var spotify = require('./spotify');
 // returns an array with up to two elements
 // -- array[0] is the login in the config
 // -- array[1] is the password in the config
+/**
+ * Checks env variables for database settings - SPOTIFY_HOST, SPOTIFY_USER, SPOTIFY_PASS, SPOTIFY_DB
+ * Falls back on .config in the current directory for db values
+ *
+ * @return {array} an array with values for the database login
+ * arr[0] - host
+ * arr[1] - user
+ * arr[2] - password
+ * arr[3] - database
+ */
 function readConfig() {
-  var contents = fs.readFileSync('.config', 'utf8');
-  var list = contents.split('\n');
-  
-  var ret = ['', '', '', ''] // dummy array
-  
-  list.forEach(function(element) {
-    var el = -1;
-    if(element.startsWith('host')) {
-      el = 0;
-    }
+	if(process.env.SPOTIFY_HOST &&
+	   process.env.SPOTIFY_USER &&
+	   process.env.SPOTIFY_PASS &&
+	   process.env.SPOTIFY_DB) {
+		console.log('found env variables for db');
+		return [process.env.SPOTIFY_HOST,
+			process.env.SPOTIFY_USER,
+			process.env.SPOTIFY_PASS,
+			process.env.SPOTIFY_DB];
+	}
 
-    if(element.startsWith('user')) {
-      el = 1;
-    }
-  
-    if(element.startsWith('password')) {
-      el = 2;
-    }
+	var contents = fs.readFileSync('.config', 'utf8');
+	var list = contents.split('\n');
 
-    if(element.startsWith('database')) {
-      el = 3;
-    }
+	var ret = ['', '', '', ''] // dummy array
 
-    if(el != -1) {
-      ret[el] = element.split(':')[1].trim();
-    }
+	list.forEach(function(element) {
+		var el = -1;
+		if(element.startsWith('host')) {
+			el = 0;
+		}
 
-  });
-  
-  return ret;
+		if(element.startsWith('user')) {
+			el = 1;
+		}
+
+		if(element.startsWith('password')) {
+			el = 2;
+		}
+
+		if(element.startsWith('database')) {
+			el = 3;
+		}
+
+		if(el != -1) {
+			ret[el] = element.split(':')[1].trim();
+		}
+	});
+
+	return ret;
 }
 
 var app = express().use(express.static('./public'))
@@ -51,31 +71,31 @@ var app = express().use(express.static('./public'))
 
 var db = readConfig();
 var con = mysql.createConnection({
-  host: db[0],
-  user: db[1],
-  password: db[2],
-  database: db[3]
+	host: db[0],
+	user: db[1],
+	password: db[2],
+	database: db[3]
 });
 
 con.connect(function(err) {
-  if(err) {
-    console.log('Error connecting to database\n' + err);
-  } else {
-    console.log('Database successfully connected');
-    con.query('SELECT * FROM playlists', function(err, row, fields) {
-      if(err && err.code == 'ER_NO_SUCH_TABLE') {
-        var query = fs.readFileSync('create.sql', 'utf8');
-	con.query(query, function(er, ro, field) {
-	  if(er) {
-	    console.log('Error applying create script!\n' + er);
-	  } else console.log('Successfully applied create script to database');
-	});
-      } else {
-	console.log('playlists already exists, printing below');
-	console.log(row);
-      }
-    });
-  }
+	if(err) {
+		console.log('Error connecting to database\n' + err);
+	} else {
+		console.log('Database successfully connected');
+		con.query('SELECT * FROM playlists', function(err, row, fields) {
+			if(err && err.code == 'ER_NO_SUCH_TABLE') {
+				var query = fs.readFileSync('create.sql', 'utf8');
+				con.query(query, function(er, ro, field) {
+					if(er) {
+						console.log('Error applying create script!\n' + er);
+					} else console.log('Successfully applied create script to database');
+					});
+			} else {
+				console.log('playlists already exists, printing below');
+				console.log(row);
+			}
+		});
+	}
 });
 
 var stateKey = 'spotify_auth_state';
