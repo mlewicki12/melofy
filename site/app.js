@@ -65,7 +65,12 @@ function readConfig() {
 	return ret;
 }
 
-var app = express().use(express.static('./public'))
+var pblc = './public'
+if(process.env.SPOTIFY_SITE) {
+	pblc = process.env.SPOTIFY_SITE;
+}
+
+var app = express().use(express.static(pblc))
 		   .use(cors())
 		   .use(cookieParser());
 
