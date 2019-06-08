@@ -66,8 +66,8 @@ function readConfig() {
 }
 
 var pblc = './public'
-if(process.env.SPOTIFY_SITE) {
-	pblc = process.env.SPOTIFY_SITE;
+if(process.env.SPOTIFY_PUBLIC) {
+	pblc = process.env.SPOTIFY_PUBLIC;
 }
 
 console.log('serving public files from ' + pblc);
