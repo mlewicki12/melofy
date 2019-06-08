@@ -54,6 +54,19 @@
           console.log("ERROR");               //error
         }
       });*/
+	  
+	  function recommendationsCall(){
+		*$.ajax({
+        type: "GET",
+        url : URL,
+        dataType : "html",
+        success : function(msg){
+          document.getElementById("songlist").innerHTML = msg;  //results
+        },
+        error: function(){
+          console.log("ERROR Recommendationscall");               //error
+        }
+	  }
     </script>
   </head>
 
