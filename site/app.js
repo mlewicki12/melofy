@@ -99,7 +99,13 @@ con.connect(function(err) {
 });
 
 var stateKey = 'spotify_auth_state';
-spotify.init('http://localhost:8080/callback');
+
+var callback = 'http://localhost:8080/callback';
+if(process.env.SPOTIFY_CALLBACK) {
+	callback = process.env.SPOTIFY_CALLBACK;
+}
+
+spotify.init(callback);
 
 /*
  * Login to Spotify

@@ -31,8 +31,8 @@ exports.info = function() {
 }
 
 this.info();
-console.log('received values for client_id and client_secret, printing client_id below');
-console.log(this.client_id);
+console.log('received values for client_id and client_secret');
+console.log('client id value ' + this.client_id);
 
 var access_token;
 var refresh_token;
