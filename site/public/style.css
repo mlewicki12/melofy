@@ -43,6 +43,7 @@ body {
 
 .search-bar {
 	width: 33.33%;
+	margin: auto;
 }
 
 .song {
