@@ -32,8 +32,8 @@
               </a>
             </div>
             <div class="col-sm-4">
-              <h3>Credits</h3>
-              <p>Check out who made this shitty site</p>
+              <h3 id='profile'></h3>
+              <div id='profilePic'></div>
             </div>
             <div class="col-sm-4">
               <h3>Your Song SQL</h3>
@@ -50,7 +50,7 @@
         </div>
       </div>
     <!--Required for bootstrap -->
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <!-- <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script> -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <script src="js.cookie.js"></script>
@@ -79,9 +79,11 @@
             url: './profile?access=' + Cookies.get('access'), //creating the url used for the request
             contentType: "application/json; charset=utf-8",
             data: "{}",
-            dataType: "html",
-            success: function(msg) {
-              console.log(msg);
+            dataType: "json",
+            success: function(json) {
+              console.log(json)
+              $("#profile").html("Welcome " + json.display_name )
+              $("#profilePic").html("<img src=\"" + json.images[0].url + "\" alt=\"Profile Pic\">" )
             },
             error: function(xhr, ajaxOptions, thrownError) {
               console.log('Error in getting profile data.')
