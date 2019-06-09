@@ -44,7 +44,21 @@
 				<button type="button" id="userplaylists" class="btn btn-secondary thePink">See User Playlists</button>
 				<script type="text/javascript">
 					document.getElementById("userplaylists").onclick = function () {
-						location.href = "www.google.com";
+						 $.ajax({
+							type: "GET",
+							url: './profile?access=' + Cookies.get('spotify_access'), //creating the url used for the request
+							contentType: "application/json; charset=utf-8",
+							data: "{}",
+							dataType: "json",
+							success: function(json) {
+								userid = json.dislay_name;
+							    location.href = "database.html?userid=" + userid;
+							},
+							error: function(xhr, ajaxOptions, thrownError) {
+							  console.log('Error in getting profile data.')
+							}
+						  });
+						
 					};
 				</script>
               </div>
