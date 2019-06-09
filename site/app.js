@@ -284,7 +284,15 @@ app.get('/insertplaylist', function(req, res) {
 app.get('/displayplaylist', function(req, res) {
 	var table = '<table class="table">';
 	table += '<thead class="thead-dark">';
-	con.query('SELECT * from playlists' , function(err, rows, fields){
+	var selectString = '';
+	if(Object.keys(req.query).length === 0){
+		selectString = 'SELECT * from playlists';
+	}
+	else{
+		var user = req.query.userid;
+		selectString = "SELECT * from playlists where userid='" + user + "' ;";
+	}
+	con.query( selectString, function(err, rows, fields){
 			if(err) {
 				console.log('encountered error while accessing database!\n' + err);
 				return -1;
@@ -299,6 +307,7 @@ app.get('/displayplaylist', function(req, res) {
 			res.send(table);
 			res.end();
 	});
+	
 
 });
 
