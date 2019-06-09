@@ -1,42 +1,25 @@
 <!DOCTYPE html>
-<style type="text/css">
-  .active-pink-4 input[type=text]:focus:not([readonly]) {
-    border: 1px solid #f48fb1;
-    box-shadow: 0 0 0 1px #f48fb1;
-  }
-  .active-pink-3 input[type=text] {
-    border: 1px solid #f48fb1;
-    box-shadow: 0 0 0 1px #f48fb1;
-  }
-  .form-control{
-    position:relative;
-    left:100%;
-  }
-  #songlist, #seedsongs, #attributes{
-    position:relative;
-    left:33.33%;
-  }
-  th{
-    color: #f48fb1;
-  }
-</style>
-
 <html>
   <head>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- required by bootstrap -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <!-- BootStrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <title>Mellow-fy - Generator</title>
 
+    <link rel="stylesheet" href="style.css">
+    <title>Mellow-fy - Generator</title>
     <meta charset="UTF-8">
 
     <script src="js.cookie.js"></script>
     <script type="text/javascript">
 
-      var interval = null;
+      var interval;
 
       function initSearch(state){
         if (state == 1){
@@ -44,142 +27,87 @@
         }
         else{
           clearInterval(interval);
+	  interval = null;
           search();
         }
       }
 
-      function search(){
-        console.log("search request");
+      function toSong(info, cls) {
+	var ret = '<div class="' + cls + '">';
+	ret += info.name + ' - ' + info.artists[0].name;
+	ret += '</div>';
+
+	return ret;
       }
 
-      console.log("access is: " + Cookies.get('access'));
-      console.log("refresh is: " + Cookies.get('refresh'));
+      function searchify(text) {
+	return text.replace(/\s/g, '%20');
+      }
 
+      var prev = '';
+      function search(){
+	var search = $('.search').val();
+	if(search.length < 3 || search == prev) {
+	  return -1;
+	}
 
+	var url = './search?query=' + searchify(search) + '&access=' + Cookies.get('access');
+        console.log('sending search request to ' + url);
+	prev = search;
+	$.ajax({
+	  type: 'GET',
+	  url: url,
+	  dataType: 'json',
 
-      /*$(document).ready(function(){
-        $("input").change(function(){
-
-          console.log("Works!! " + document.getElementById("search").value);
-		  var URL =  "http://localhost:8080/recommendations";
-
-		  var table = document.getElementById("seedsongs");
-		  var trs = table.getElementByTagName("tr");
-		  for (var i =0; i< trs.length; i++){
-			console.log(trs[i]);
-		  }
-
-		  /*
-		  $.ajax({
-			type: "GET",
-			url : URL,
-			dataType : "html",
-			success : function(msg){
-			  document.getElementById("songlist").innerHTML = msg;  //results
-			},
-			error: function(){
-			  console.log("ERROR");               //error
+	  success: function(msg) {
+		  $('.songlist').empty();
+		  for(var i = 0; i < msg.length; ++i) {
+			var cls = 'song';
+			if(i == msg.length - 1) {
+			  cls = 'bottom song';
 			}
-		});
 
+			$('.songlist').append(toSong(msg[i], cls));
+		  }
+	  },
 
-        });
-      });
+	  error: function(jgXHR, textStatus, errorThrown) {
+	    console.log('Error: ' + textStates + ' ' + errorThrown);
+	  }
+	});
+      }
 
-      //var URL = "";         //URL
+      var access, refresh;
+      function getCookies() {
+	if(Cookies.get('access')) {
+          console.log("access is: " + Cookies.get('access'));
+	  access = Cookies.get('access');
+	}
 
-      /*$.ajax({
-        type: "GET",
-        url : URL,
-        dataType : "html",
-        success : function(msg){
-          document.getElementById("songlist").innerHTML = msg;  //results
-        },
-        error: function(){
-          console.log("ERROR");               //error
-        }
-      });*/
-
-
-
+        if(Cookies.get('refresh')) {
+	  console.log("refresh is: " + Cookies.get('refresh'));
+	  refresh = Cookies.get('refresh');
+	}
+      }
     </script>
   </head>
 
   <body>
-    <div class="jumbotron text-center">
-      <h1 style="color: #f48fb1">Playlist Generator</h1>
-      <p>Bottom text.</p>
+    <div class="jumbotron text-center textPrimary background1">
+      <h1 class="header">GENERATOR</h1>
+      <p class="quote">Bottom text.</p>
     </div>
 
     <!-- Search form -->
-    <div class="active-pink-3 active-pink-4 mb-4" style="width:33.33%; justify-content:center">
-      <input class="form-control" type="text" placeholder="Search" aria-label="Search" id="search" onfocus="initSearch(1)" onfocusout="initSearch(2)">
-    </div>
-
-    <div id="seedsongs">
-      <table>
-        <tr>
-          <th>Seed Songs</th>
-        </tr>
-        <tr>
-          <td>Song1</td>
-        </tr>
-        <tr>
-          <td>Song2</td>
-        </tr>
-        <tr>
-          <td>Song3</td>
-        </tr>
-		<tr>
-          <td>Song4</td>
-        </tr>
-		<tr>
-          <td>Song5</td>
-        </tr>
-      </table>
+    <div class="search-bar">
+	    <div class="active-pink-3">
+	      <input class="search form-control" type="text" placeholder="Search" aria-label="Search" onfocus="initSearch(1)" onfocusout="initSearch(2)">
+	    </div>
+	
+	    <div class="songlist">
+	    </div>
     </div>
 
     <br>
-
-    <div id="songlist">
-      <table>
-        <tr>
-          <th>Generated Songs</th>
-        </tr>
-        <tr>
-          <td>Test</td>
-        </tr>
-        <tr>
-          <td>Test</td>
-        </tr>
-        <tr>
-          <td>Test</td>
-        </tr>
-      </table>
-    </div>
-
-    <br>
-
-    <div id="attributes">
-      <table>
-        <tr>
-          <th>Song Attributes</th>
-        </tr>
-        <tr>
-          <td>Test</td>
-        </tr>
-        <tr>
-          <td>Test</td>
-        </tr>
-        <tr>
-          <td>Test</td>
-        </tr>
-      </table>
-    </div>
-
-    <!-- required by bootstrap -->
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
   </body>
 </html>
