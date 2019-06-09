@@ -27,20 +27,44 @@ th {
 </head>
 
 <script>
-	
-function getTable(){
-	var url = "http://localhost:8080/displayplaylist";
-		$.ajax({
-			url : url,
-			type : 'GET',
-			datatype : 'html',
-			success : function(data){
-				document.getElementById('answer').innerHTML = data;
-		
-			}
-	});
+
+function getParams() {
+
+    var params = {},
+        pairs = document.URL.split('?')
+               .pop()
+               .split('&');
+
+    for (var i = 0, p; i < pairs.length; i++) {
+           p = pairs[i].split('=');
+           params[ p[0] ] =  p[1];
+    }     
+
+    return params;
 }
 	
+function getTable(){
+	var params = getParams();
+	var url;
+	if (params["userid"]){
+		url = "http://localhost:8080/displayplaylist?userid=" + params["userid"];
+	}
+	else{
+		url = "http://localhost:8080/displayplaylist";
+	}
+	$.ajax({
+		url : url,
+		type : 'GET',
+		datatype : 'html',
+		success : function(data){
+			document.getElementById('answer').innerHTML = data;
+	
+		}
+	});
+}
+
+
+
 </script>
 
 <div class="jumbotron text-center textPrimary background1">
