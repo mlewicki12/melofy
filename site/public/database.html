@@ -1,0 +1,43 @@
+<html>
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js">
+</script>
+
+<link type="text/css" rel="stylesheet"
+href="http://ajax.googleapis.com/ajax/libs/jquerymobile/1.4.5/jquery.mobile.min.css"/>
+
+<style>
+
+table, th, td {
+  border: 1px solid black;
+}
+</style>
+
+</head>
+
+<script>
+	
+function getTable(){
+	var url = "http://localhost:8080/displayplaylist";
+		$.ajax({
+			url : url,
+			type : 'GET',
+			datatype : 'html',
+			success : function(data){
+				document.getElementById('answer').innerHTML = data;
+		
+			}
+	});
+}
+	
+</script>
+
+
+<body onload="getTable()">
+
+<div id="answer">
+</div>
+
+
+
+</html>
