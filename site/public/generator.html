@@ -89,6 +89,32 @@
 	  refresh = Cookies.get('refresh');
 	}
       }
+	  
+	  function generateFunction(){
+		var URL =  "http://localhost:8080/recommendations";
+		  
+		  var table = document.getElementById("seedsongs");
+		  var tracks = "";
+		  $('#seedsongs tr').each(function(){
+			$(this).find('td').each(function(){
+				tracks += $(this)[0].innerHTML + ",";
+				
+		  });
+		  
+	      });
+		  URL += "?tracks=" + tracks.substring(0, tracks.length-1);
+		  console.log(URL);
+		  
+		  $.ajax({
+			url : URL,
+			type : 'GET',
+			datatype : 'html',
+			success : function(data){
+				console.log("recommendations sent");
+		
+			}
+		});
+	  }
     </script>
   </head>
 
@@ -132,5 +158,7 @@
     </div>
 
     <br>
+	
+	<button type="button" class="btn btn-secondary thePink"  onclick="generateFunction();">Generate</button>
   </body>
 </html>
