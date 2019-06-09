@@ -223,6 +223,7 @@ app.get('/recommendations', function(req, res) {
  */
 app.get('/search', function(req, res) {
 	spotify.search(req.query.query, req.query.access, function(items) {
+		console.log(items);
 		res.send(items);
 	});
 });

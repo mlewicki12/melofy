@@ -51,7 +51,7 @@
 	  return -1;
 	}
 
-	var url = './search?query=' + searchify(search) + '&access=' + Cookies.get('access');
+	var url = './search?query=' + searchify(search) + '&access=' + Cookies.get('spotify_access');
         console.log('sending search request to ' + url);
 	prev = search;
 	$.ajax({
@@ -120,7 +120,7 @@
 
   <body>
     <div class="jumbotron text-center textPrimary background1">
-      <h1 class="header">GENERATOR</h1>
+      <a href="./"><h1 class="header">GENERATOR</h1></a>
       <p class="quote">Bottom text.</p>
     </div>
 

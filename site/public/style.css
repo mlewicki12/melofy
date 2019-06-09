@@ -41,6 +41,14 @@ body {
 	box-shadow 0 0 0 1px #f48fb1;
 }
 
+.form-control {
+	border-radius: 20px 20px 0 0;
+}
+
+a:active, a:hover {
+	text-decoration: none;
+}	
+
 .search-bar {
 	width: 33.33%;
 	margin: auto;
