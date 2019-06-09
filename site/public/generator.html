@@ -51,7 +51,7 @@
 	  return -1;
 	}
 
-	var url = './search?query=' + searchify(search) + '&access=' + Cookies.get('access');
+	var url = './search?query=' + searchify(search) + '&access=' + Cookies.get('spotify_access');
         console.log('sending search request to ' + url);
 	prev = search;
 	$.ajax({
@@ -76,25 +76,12 @@
 	  }
 	});
       }
-
-      var access, refresh;
-      function getCookies() {
-	if(Cookies.get('access')) {
-          console.log("access is: " + Cookies.get('access'));
-	  access = Cookies.get('access');
-	}
-
-        if(Cookies.get('refresh')) {
-	  console.log("refresh is: " + Cookies.get('refresh'));
-	  refresh = Cookies.get('refresh');
-	}
-      }
     </script>
   </head>
 
   <body>
     <div class="jumbotron text-center textPrimary background1">
-      <h1 class="header">GENERATOR</h1>
+      <a href="./"><h1 class="header">GENERATOR</h1></a>
       <p class="quote">Bottom text.</p>
     </div>
 
