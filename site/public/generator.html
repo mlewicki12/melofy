@@ -34,6 +34,7 @@
 
       function toSong(info, cls) {
 	var ret = '<div class="' + cls + '">';
+  ret += '<img src="' + info.album.images[2].url + '" alt="Album Cover"> '
 	ret += info.name + ' - ' + info.artists[0].name;
 	ret += '</div>';
 
@@ -60,6 +61,7 @@
 	  dataType: 'json',
 
 	  success: function(msg) {
+      console.log(msg)
 		  $('.songlist').empty();
 		  for(var i = 0; i < msg.length; ++i) {
 			var cls = 'song';
@@ -129,11 +131,11 @@
 	    <div class="active-pink-3">
 	      <input class="search form-control" type="text" placeholder="Search" aria-label="Search" onfocus="initSearch(1)" onfocusout="initSearch(2)">
 	    </div>
-	
+
 	    <div class="songlist">
 	    </div>
     </div>
-	
+
 	<div id="seedsongs">
       <table>
         <tr>
