@@ -282,18 +282,20 @@ app.get('/insertplaylist', function(req, res) {
  * @return {html} The constructed html table
  */
 app.get('/displayplaylist', function(req, res) {
-	var table = "<table>";
+	var table = '<table class="table">';
+	table += '<thead class="thead-dark">';
 	con.query('SELECT * from playlists' , function(err, rows, fields){
 			if(err) {
 				console.log('encountered error while accessing database!\n' + err);
 				return -1;
 			}
 
-			table += "<tr><th>ID</th><th>User ID</th><th>Playlist</th></tr>";
+			table += '<tr><th scope="col">ID</th><th scope="col">User ID</th><th scope="col">Playlist</th></tr>';
+			table += "</thread><tbody>";
 			for (var i = 0; i < rows.length; i++){
-				table += "<tr><td>" + rows[i].id + "</td><td>" + rows[i].userid + "</td><td>" + rows[i].link +  "</td></tr>";
+				table += '<tr><th scope="row">' + rows[i].id + "</th><td>" + rows[i].userid + "</td><td>" + rows[i].link +  '</td></tr>';
 			}
-			table += "</table>";
+			table += "</tbody></table>";
 			res.send(table);
 			res.end();
 	});
