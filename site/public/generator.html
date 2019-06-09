@@ -19,6 +19,19 @@
     <script src="js.cookie.js"></script>
     <script type="text/javascript">
 
+      function advMenu(){
+        $('.advancedmenu').html("");
+        $('.advancedmenu').append("<label for='range1' style='color: #f48fb1'>Range1: &nbsp;&nbsp;&nbsp;</label>");
+        $('.advancedmenu').append("<input type='range' class='custom-range' min='0' max='1' step='0.01' id='range1'>");
+      }
+
+      /*'acousticness', 'danceability',
+        'duration_ms', 'energy', 'instrumentalness',
+        'key', 'liveness', 'loudness', 'mode',
+        'popularity', 'speechiness', 'tempo',
+        'valence'
+      */
+
       var interval;
 
       function initSearch(state){
@@ -134,6 +147,13 @@
 
 	    <div class="songlist">
 	    </div>
+
+      <div class="advancedsearch">
+        <button type='button' class='btn btn-link' onclick="advMenu()">Advanced</button>
+      </div>
+
+      <div class="advancedmenu">
+      </div>
     </div>
 
 	<div id="seedsongs">
