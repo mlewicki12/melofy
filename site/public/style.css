@@ -23,7 +23,13 @@
 	font-family: "Pseudolux", Arial, sans;
 	font-size: 8em;
 	letter-spacing: -13px;
-	text-shadow: 0px 0px 5px #bbbbbb;
+	text-shadow: 0px 0px 25px #bbbbbb;
+}
+
+.header:hover {
+	color: #5b6369;
+	font-size: 7.75em;
+	text-shadow: 0px 0px 25px #f48fb1;
 }
 
 .btn {
