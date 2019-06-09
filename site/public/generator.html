@@ -1,166 +1,141 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<head>
+		<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+		<!-- Required meta tags -->
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <!-- required by bootstrap -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-    <!-- BootStrap CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+		<!-- required by bootstrap -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+		<!-- BootStrap CSS -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
-    <link rel="stylesheet" href="style.css">
-    <title>Mellow-fy - Generator</title>
-    <meta charset="UTF-8">
+		<link rel="stylesheet" href="style.css">
+		<title>Mellow-fy - Generator</title>
+		<meta charset="UTF-8">
 
-    <script src="js.cookie.js"></script>
-    <script type="text/javascript">
+		<script src="js.cookie.js"></script>
+		<script type="text/javascript">
+			var interval;
 
-      var interval;
-
-      function initSearch(state){
-        if (state == 1){
-          interval = setInterval(search, 1000);
-        }
-        else{
-          clearInterval(interval);
-	  interval = null;
-          search();
-        }
-      }
-
-      function toSong(info, cls) {
-	var ret = '<div class="' + cls + '">';
-  ret += '<img src="' + info.album.images[2].url + '" alt="Album Cover"> '
-	ret += info.name + ' - ' + info.artists[0].name;
-	ret += '</div>';
-
-	return ret;
-      }
-
-      function searchify(text) {
-	return text.replace(/\s/g, '%20');
-      }
-
-      var prev = '';
-      function search(){
-	var search = $('.search').val();
-	if(search.length < 3 || search == prev) {
-	  return -1;
-	}
-
-	var url = './search?query=' + searchify(search) + '&access=' + Cookies.get('spotify_access');
-        console.log('sending search request to ' + url);
-	prev = search;
-	$.ajax({
-	  type: 'GET',
-	  url: url,
-	  dataType: 'json',
-
-	  success: function(msg) {
-      console.log(msg)
-		  $('.songlist').empty();
-		  for(var i = 0; i < msg.length; ++i) {
-			var cls = 'song';
-			if(i == msg.length - 1) {
-			  cls = 'bottom song';
+			function initSearch(state) {
+				if (state == 1) {
+					interval = setInterval(search, 1000);
+				} else {
+					clearInterval(interval);
+					interval = null;
+					search();
+				}
 			}
 
-			$('.songlist').append(toSong(msg[i], cls));
-		  }
-	  },
+			function toSong(info, cls) {
+				var ret = '<div class="' + cls + '">';
+				ret += '<img src="' + info.album.images[2].url + '" alt="Album Cover"> '
+				ret += info.name + ' - ' + info.artists[0].name;
+				ret += '</div>';
 
-	  error: function(jgXHR, textStatus, errorThrown) {
-	    console.log('Error: ' + textStates + ' ' + errorThrown);
-	  }
-	});
-      }
-
-      var access, refresh;
-      function getCookies() {
-	if(Cookies.get('access')) {
-          console.log("access is: " + Cookies.get('access'));
-	  access = Cookies.get('access');
-	}
-
-        if(Cookies.get('refresh')) {
-	  console.log("refresh is: " + Cookies.get('refresh'));
-	  refresh = Cookies.get('refresh');
-	}
-      }
-	  
-	  function generateFunction(){
-		var URL =  "http://localhost:8080/recommendations";
-		  
-		  var table = document.getElementById("seedsongs");
-		  var tracks = "";
-		  $('#seedsongs tr').each(function(){
-			$(this).find('td').each(function(){
-				tracks += $(this)[0].innerHTML + ",";
-				
-		  });
-		  
-	      });
-		  URL += "?tracks=" + tracks.substring(0, tracks.length-1);
-		  console.log(URL);
-		  
-		  $.ajax({
-			url : URL,
-			type : 'GET',
-			datatype : 'html',
-			success : function(data){
-				console.log("recommendations sent");
-		
+				return ret;
 			}
-		});
-	  }
-    </script>
-  </head>
 
-  <body>
-    <div class="jumbotron text-center textPrimary background1">
-      <a href="./"><h1 class="header">GENERATOR</h1></a>
-      <p class="quote">Bottom text.</p>
-    </div>
+			function searchify(text) {
+				return text.replace(/\s/g, '%20');
+			}
 
-    <!-- Search form -->
-    <div class="search-bar">
-	    <div class="active-pink-3">
-	      <input class="search form-control" type="text" placeholder="Search" aria-label="Search" onfocus="initSearch(1)" onfocusout="initSearch(2)">
-	    </div>
+			var prev = '';
+			function search(){
+				var search = $('.search').val();
+				if(search.length < 3 || search == prev) {
+					return -1;
+				}
 
-	    <div class="songlist">
-	    </div>
-    </div>
+				var url = './search?query=' + searchify(search) + '&access=' + Cookies.get('spotify_access');
+				console.log('sending search request to ' + url);
+				prev = search;
 
-	<div id="seedsongs">
-      <table>
-        <tr>
-          <th>Seed Songs</th>
-        </tr>
-        <tr>
-          <td>Song1</td>
-        </tr>
-        <tr>
-          <td>Song2</td>
-        </tr>
-        <tr>
-          <td>Song3</td>
-        </tr>
-		<tr>
-          <td>Song4</td>
-        </tr>
-		<tr>
-          <td>Song5</td>
-        </tr>
-      </table>
-    </div>
+				$.ajax({
+					type: 'GET',
+					url: url,
+					dataType: 'json',
 
-    <br>
-	
-	<button type="button" class="btn btn-secondary thePink"  onclick="generateFunction();">Generate</button>
-  </body>
+					success: function(msg) {
+						console.log(msg)
+						$('.songlist').empty();
+						for(var i = 0; i < msg.length; ++i) {
+							var cls = 'song';
+							if(i == msg.length - 1) {
+								cls = 'bottom song';
+							}
+
+						$('.songlist').append(toSong(msg[i], cls));
+						}
+					},
+
+					error: function(jgXHR, textStatus, errorThrown) {
+						console.log('Error: ' + textStates + ' ' + errorThrown);
+					}
+				});
+			}
+
+			var access, refresh;
+			function getCookies() {
+				if(Cookies.get('access')) {
+					console.log("access is: " + Cookies.get('access'));
+					access = Cookies.get('access');
+				}
+
+				if(Cookies.get('refresh')) {
+					console.log("refresh is: " + Cookies.get('refresh'));
+					refresh = Cookies.get('refresh');
+				}
+			}
+			  
+			function generateFunction(){
+				var URL =  "http://localhost:8080/recommendations";
+
+				var table = document.getElementById("seedsongs");
+				var tracks = "";
+				$('#seedsongs tr').each(function(){
+					$(this).find('td').each(function(){
+						tracks += $(this)[0].innerHTML + ",";
+					});
+				});
+
+				URL += "?tracks=" + tracks.substring(0, tracks.length-1);
+				console.log(URL);
+
+				$.ajax({
+					url : URL,
+					type : 'GET',
+					datatype : 'html',
+					success : function(data){
+						console.log("recommendations sent");
+					}
+				});
+			}
+		</script>
+	</head>
+
+	<body>
+		<div class="jumbotron text-center textPrimary background1">
+			<a href="./"><h1 class="header">GENERATOR</h1></a>
+			<p class="quote">Bottom text.</p>
+		</div>
+
+		<!-- Search form -->
+		<div class="search-bar">
+			<div class="active-pink-3">
+				<input class="search form-control" type="text" placeholder="Search" aria-label="Search" onfocus="initSearch(1)" onfocusout="initSearch(2)">
+			</div>
+
+			<div class="songlist"></div>
+		</div>
+
+		<div id="seedsongs"></div>
+
+		<br>
+
+		<button type="button" class="btn btn-secondary thePink"  onclick="generateFunction();">Generate</button>
+	</body>
 </html>
