@@ -41,9 +41,12 @@
 			  <a href="./database.html">
                 <button type="button" class="btn btn-secondary thePink">See All Playlists</button>
               </a>
-			  <a href="./database.html?userid=learexjey">
-                <button type="button" class="btn btn-secondary thePink">See User Playlists</button>
-              </a>
+				<button type="button" id="userplaylists" class="btn btn-secondary thePink">See User Playlists</button>
+				<script type="text/javascript">
+					document.getElementById("userplaylists").onclick = function () {
+						location.href = "www.google.com";
+					};
+				</script>
               </div>
             </div>
           </div>
@@ -124,6 +127,8 @@
 
         toggle();
 	      getQuote();
+		  
+		 
 
 
     </script>
