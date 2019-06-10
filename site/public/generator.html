@@ -153,11 +153,7 @@
 				console.log("here");
 				var URL =  "http://localhost:8080/recommendations";
 
-				var table = document.getElementById("seedsongs");
-				var tracks = "";
-				$('.songlist').each(function(i, obj){
-					console.log(obj);
-				});
+				var seeds = $("#seeds");
 
 				URL += "?tracks=" + tracks.substring(0, tracks.length-1);
 				console.log(URL);
