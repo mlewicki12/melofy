@@ -34,6 +34,7 @@
 .btn {
 	width: 100%;
 	padding: 5px;
+	color: #f48fb1;
 }
 
 body {
@@ -71,7 +72,7 @@ a:active, a:hover {
 }
 
 .song:hover {
-	background-color: #5a6268;
+	background-color: #5b6369;
 }
 
 .album {
@@ -161,4 +162,21 @@ a:active, a:hover {
 label {
 	flex-grow: 1;
 	margin-left: auto;
+}
+
+.inactive {
+	visibility: hidden;
+}
+
+.inactive-text {
+	color: #5b6369;
+}
+
+.advancedmenu {
+	display: none;
+}
+
+.inactive-text:hover {
+	
+	color: #5b6369;
 }

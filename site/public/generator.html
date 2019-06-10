@@ -32,19 +32,14 @@
 			}
 
 			function advMenu(){
-				var url = './sliders.html';
-				console.log("we here");
-				$.ajax({
-					url : url,
-					type : 'GET',
-					datatype : 'html',
-					success : function(data){
-						document.getElementById('advancedmenu').innerHTML = data;
-				
-					}
-				});
-				
-				
+				console.log( $('#advanced').css('color'));
+				if( $('#advanced').css('color') == 'rgb(91, 99, 105)') {
+					$('#advanced').css('color', '#f48fb1');
+					$('.advancedmenu').css('display', 'block');
+				} else {
+					$('#advanced').css('color', '#5b6369');
+					$('.advancedmenu').css('display', 'none');
+				}
 			}
 
 			/*'acousticness', 'danceability',
@@ -152,8 +147,6 @@
 			function generateFunction(){
 				var URL =  "./recommendations";
 
-				
-
 				console.log("we major");
 				$("#seeds").each(function(){
 					console.log(this.id);
@@ -197,30 +190,84 @@
 				$('output.' + attr).val(ret);
 			}
 
+			function toggle(attr) {
+				if( $('#' + attr).css('color') == 'rgb(91, 99, 105)') {
+					$('#' + attr).css('color', '#f48fb1');
+					$('input.' + attr).css('visibility', 'visible');
+					$('output.' + attr).css('visibility', 'visible');
+			     	} else {
+					$('#' + attr).css('color', '#5b6369');
+					$('input.' + attr).css('visibility', 'hidden');
+					$('output.' + attr).css('visibility', 'hidden');
+			     	}
+			}
+
 			function getSlider(attr, label) {
 				var ret = '<div class="slider">';
-				ret += '<label class="slider-label" for="' + attr + '">' + label + '</label>';
-				ret += '<input class="slide ' + attr + '" type="range" min="0" max="1" value="0.5" step="0.01" oninput="setValue(\'' + attr + '\');"></input>';
-				ret += '<output class="slider-value ' + attr + '">0.50</output>';
+				ret += '<input type="checkbox" onclick="toggle(\'' + attr + '\')">';
+				ret += '<label class="inactive-text slider-label" id="' + attr + '" for="' + attr + '">' + label.name + '</label>';
+				ret += '<input class="inactive slide ' + attr + '" type="range" min="0" max="1" value="0.5" step="0.01" oninput="setValue(\'' + attr + '\');"></input>';
+				ret += '<output class="inactive slider-value ' + attr + '">0.50</output>';
 				ret += '</div>';
 
 				return ret;
 			}
 
-			$(document).ready( function() {
-				var keys = ['acoustic', 'Acousticness',
-					    'dance', 'Danceability',
-					    'energy', 'Energy',
-					    'instrument', 'Instrumentalness',
-					    'live', 'Liveness',
-					    'pop', 'Popularity',
-					    'speechiness', 'Speechiness',
-					    'tempo', 'Tempo',
-					    'valence', 'Valence'];
+			var attributes = {
+				acoustic: {
+					name: 'Acousticness',
+					desc: '',
+					target: 'acousticness'
+				},
 
-				for(var i = 0; i < keys.length; i += 2) {
-					$('.advancedmenu').append( getSlider(keys[i], keys[i+1]));
+				dance: {
+					name: 'Danceability',
+					desc: '',
+					target: 'danceability'
+				},
+
+				energy: {
+					name: 'Energy',
+					desc: '',
+					target: 'energy'
+				},
+
+				instrument: {
+					name: 'Instrumentalness',
+					desc: '',
+					target: 'instrumentalness'
+				},
+
+				live: {
+					name: 'Liveness',
+					desc: '',
+					target: 'liveness'
+				},
+
+				pop: {
+					name: 'Popularity',
+					desc: '',
+					target: 'popularity'
+				},
+
+				speech: {
+					name: 'Speechiness',
+					desc: '',
+					target: 'speechiness'
+				},
+
+				valence: {
+					name: 'Valence',
+					desc: '',
+					target: 'valence'
 				}
+
+			}
+
+			$(document).ready( function() {
+				Object.keys(attributes).forEach( function(element) {
+					$('.advancedmenu').append( getSlider(element, attributes[element]));
+				});
 			});
 		</script>
 	</head>
@@ -240,12 +287,10 @@
 			<div class="songlist" id="results"></div>
 
 			<div class="advancedsearch">
-				<button type='button' class='btn btn-link' onclick="advMenu()">Advanced</button>
+				<button type='button' id="advanced" class='inactive-text btn btn-link' onclick="advMenu()">Advanced</button>
 			</div>
 
-			<div class="advancedmenu">
-				
-			</div>
+			<div class="advancedmenu"></div>
 			<br>
 
 			<div class="songlist" id="seeds"></div>
