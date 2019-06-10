@@ -98,7 +98,7 @@
    	 Cookies.set('spotify_refresh', refresh_token);
        }
 
-       function logged(succ, fail) {
+       function logged(fail) {
 	 var failCall = false;
 	 $.ajax({
 	   type: 'GET',
@@ -109,8 +109,6 @@
 	   success: function(json) {
 	     if(json.error && json.error.status === 401) {
 	       fail();
-	     } else {
-		succ();
 	     }
 	   }
 	 });
@@ -143,9 +141,6 @@
 	   $('.loggedin').toggleClass('show');
 	   $('.login').toggleClass('hide');
 	   $(document).ready(profileRequest);
-	 }, function() {
-	   $('.loggedin').toggleClass('hide');
-	   $('.login').toggleClass('show');
 	 });
        }
 
