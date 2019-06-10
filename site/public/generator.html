@@ -339,13 +339,34 @@
 					$('.advancedmenu').append( getSlider(element, attributes[element]));
 				});
 			});
+
+			function getQuote()
+			{
+				var rawFile = new XMLHttpRequest();
+				rawFile.open('GET', 'quotes.txt', false);
+				rawFile.onreadystatechange = function()
+				{
+					if(rawFile.readyState === 4)
+					{
+						if(rawFile.status === 200 || rawFile.status == 0)
+						{
+							var text = rawFile.responseText.split('\n');
+							var quote = text[Math.floor(Math.random()*text.length)];
+							$('.quote').text(quote);
+						}
+					}
+				}
+				rawFile.send(null);
+			}
+
+			$(document).ready(getQuote);
 		</script>
 	</head>
 
 	<body>
 		<div class="jumbotron text-center textPrimary background1">
 			<a href="./"><h1 class="header">GENERATOR</h1></a>
-			<p class="quote">Halloween is the only day you're not in a costume</p>
+			<p class="quote"></p>
 		</div>
 
 		<!-- Search form -->
