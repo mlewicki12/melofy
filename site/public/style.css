@@ -75,6 +75,10 @@ a:active, a:hover {
 	background-color: #5b6369;
 }
 
+.songlist {
+	margin-bottom: 5px;
+}
+
 .album {
 	margin-right: 5px;
 }

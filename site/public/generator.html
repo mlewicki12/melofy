@@ -152,8 +152,9 @@
 				});
 				
 				var keys = ['acousticness', 'danceability', 'energy', 'instrumentalness','liveness', 
-				'popularity', 'speechiness', 'tempo', 'valence'];		
+				'popularity', 'speechiness', 'tempo', 'valence'];	
 				
+				URL += "?access=" + Cookies.get('spotify_access');
 				URL += "?tracks=";
 				var track;
 				for(track in trackArray){
@@ -285,8 +286,7 @@
 			<br>
 
 			<div class="songlist" id="seeds"></div>
-
-
+			
 			<button type="button" class="btn btn-secondary thePink" onclick="generateFunction();">Generate</button>
 		</div>
 	</body>
