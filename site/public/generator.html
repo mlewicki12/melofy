@@ -170,8 +170,7 @@
 				URL += "?tracks=";
 				var track;
 				for(track in trackArray){
-					console.log(track);
-					URL += track + ",";
+					URL += trackArray[track] + ",";
 				}
 				URL = URL.substring(0, URL.length - 1);
 				console.log(URL);
