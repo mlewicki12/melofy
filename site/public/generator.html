@@ -161,12 +161,11 @@
 			
 				
 				var trackArray = [];
-				$("#seeds.songlist").each(function(){
+				$("#seeds.songlist").find(".song").each(function(){
 					trackArray.push(this.id);
 				});
 				console.log(trackArray);
 				
-				console.log(seeds);
 				URL += "?tracks=";
 				console.log(URL);
 				
