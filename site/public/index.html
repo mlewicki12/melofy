@@ -90,8 +90,14 @@
        var params = getHashParams();
        var access_token = params.access,
            refresh_token = params.refresh;
-       Cookies.set('spotify_access', access_token)
-       Cookies.set('spotify_refresh', refresh_token)
+       if(access_token) {
+	 Cookies.set('spotify_access', access_token);
+       }
+
+       if(refresh_token) {
+	 Cookies.set('spotify_refresh', refresh_token);
+       }
+
        console.log("access on index: " + Cookies.get('spotify_access'))
        console.log("refresh on index: " + Cookies.get('spotify_refresh'))
 
