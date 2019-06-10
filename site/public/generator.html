@@ -150,19 +150,28 @@
 			}
 			  
 			function generateFunction(){
-				console.log("sorry machik");
 				var URL =  "./recommendations";
 
 				
 
-				console.log("machik vs noodle");
+				console.log("we major");
 				$("#seeds").each(function(){
 					console.log(this.id);
 				});
+			
+				
+				var trackArray = [];
+				$("#seeds.songlist").each(function(){
+					trackArray.push(this.id);
+				});
+				console.log(trackArray);
+				
 				console.log(seeds);
 				URL += "?tracks=";
 				console.log(URL);
-
+				
+				
+				
 				$.ajax({
 					url : URL,
 					type : 'GET',
