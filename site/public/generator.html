@@ -164,9 +164,14 @@
 				$("#seeds.songlist").find(".song").each(function(){
 					trackArray.push(this.id);
 				});
-				console.log(trackArray);
+				
+				
 				
 				URL += "?tracks=";
+				var track;
+				for(track in trackArray){
+					URL += track + ",";
+				}
 				console.log(URL);
 				
 				
