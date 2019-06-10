@@ -58,6 +58,7 @@ a:active, a:hover {
 .search-bar {
 	width: 33.33%;
 	margin: auto;
+	margin-bottom: 10px;
 }
 
 .song {

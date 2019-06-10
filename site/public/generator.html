@@ -23,7 +23,7 @@
 
 			function initSearch(state) {
 				if (state == 1) {
-					interval = setInterval(search, 1000);
+					interval = setInterval(search, 500);
 				} else {
 					clearInterval(interval);
 					interval = null;
@@ -32,8 +32,7 @@
 			}
 
 			function advMenu(){
-				console.log( $('#advanced').css('color'));
-				if( $('#advanced').css('color') == 'rgb(91, 99, 105)') {
+				if($('.advancedmenu').css('display') == 'none') {
 					$('#advanced').css('color', '#f48fb1');
 					$('.advancedmenu').css('display', 'block');
 				} else {
@@ -41,13 +40,6 @@
 					$('.advancedmenu').css('display', 'none');
 				}
 			}
-
-			/*'acousticness', 'danceability',
-			'duration_ms', 'energy', 'instrumentalness',
-			'key', 'liveness', 'loudness', 'mode',
-			'popularity', 'speechiness', 'tempo',
-			'valence'
-			*/
 
 			function limit(str) {
 				var ret = str;
@@ -62,6 +54,7 @@
 			function addSong(info) {
 				$('.search').val('');
 				$('#results').empty();
+				$('.sp-list').css('display', 'block');
 
 				var cls = 'song';
 				if($('#seeds').is(':empty')) {
@@ -74,10 +67,16 @@
 
 			function deleteSong(id) {
 				$('#' + id).remove();
+				if(!$('#seeds').is(':empty')) {
+					var song = $('#seeds.songlist').find('.song');
+					if(!song.hasClass('top')) {
+						song.addClass('top');
+					}
+				}
 			}
 
 			function esc(str) {
-				return str.replace("'", "\\'");
+				return str.replace(/\'/g, "\\'");
 			}
 
 			function toSong(info, cls) {
@@ -111,13 +110,14 @@
 				var search = $('.search').val();
 				if(search.length < 3 ) {
 					$('#results').empty();
+					$('.sp-list').css('display', 'block');
+					prev = '';
 					return -1;
 				} else if(search == prev) {
 					return -1;
 				}
 
 				var url = './search?query=' + searchify(search) + '&access=' + Cookies.get('spotify_access');
-				console.log('sending search request to ' + url);
 				prev = search;
 
 				$.ajax({
@@ -126,7 +126,6 @@
 					dataType: 'json',
 
 					success: function(msg) {
-						console.log(msg)
 						$('#results').empty();
 						for(var i = 0; i < msg.length; ++i) {
 							var cls = 'song';
@@ -134,56 +133,129 @@
 								cls = 'bottom song';
 							}
 
-						$('#results').append(toSong(msg[i], cls));
+							$('#results').append(toSong(msg[i], cls));
+							$('.sp-list').css('display', 'none');
 						}
 					},
 
 					error: function(jgXHR, textStatus, errorThrown) {
-						console.log('Error: ' + textStates + ' ' + errorThrown);
+						console.log('Error: ' + textStatus + ' ' + errorThrown);
 					}
 				});
 			}
 			  
 			function generateFunction(){
 				var URL =  "./recommendations";
-				var trackArray = [];
-				$("#seeds.songlist").find(".song").each(function(){
-					trackArray.push(this.id);
-				});
-				
-				var keys = ['acousticness', 'danceability', 'energy', 'instrumentalness','liveness', 
-				'popularity', 'speechiness', 'tempo', 'valence'];	
-				
 				URL += "?access=" + Cookies.get('spotify_access');
-				URL += "?tracks=";
-				var track;
-				for(track in trackArray){
-					URL += trackArray[track] + ",";
+				
+				if($('.advancedmenu').css('display') != 'none') {
+					Object.keys(attributes).forEach( function(attr) {
+						if($('.checkbox-' + attr).prop('checked')) {
+							URL += '&' + attributes[attr].target + '=' + $('input.' + attr).val();
+						}
+					});
 				}
-							
-				URL = URL.substring(0, URL.length - 1);
-				console.log(URL);
-				
-				
+
+				var tracks = [];
+				$("#seeds.songlist").find(".song").each(function(){
+					     tracks.push(this.id);
+				});
+
+				var calls = Math.min(5, Math.floor(tracks.length / 5) + 1);
+				var url_save = URL;
+				var received_tracks = [];
+				for(var i = 0; i < calls; ++i) {
+					URL += '&tracks=';
+					for(var j = 0; j < 5; ++j) {
+						var track = tracks.pop();
+						if(!track) {
+							break;
+						}
+
+						URL += track + ',';
+					}
+
+					var defsucc = function(msg) {
+						msg.tracks.forEach(function(element) {
+							received_tracks.push(element.id);
+						});
+					}
+
+					var lastsucc = function(msg) {
+						msg.tracks.forEach(function(element) {
+							received_tracks.push(element.id);
+						});
+
+						processPlaylist(received_tracks);
+					}
+
+					var call = {
+						type: 'GET',
+						url: URL,
+						dataType: 'json',
+
+						success: defsucc,
+
+						error: function(jgXHR, textStatus, errorThrown) {
+							console.log('Error: ' + textStatus + ' ' + errorThrown);
+						}
+					};
+
+					if(i == calls - 1) {
+						call.success = lastsucc;
+					}
+
+					$.ajax(call);
+					URL = url_save;
+				}
+			}
+
+			function processPlaylist(tracks) {
+				var newTracks = []
+				var url = './playlist?access=' + Cookies.get('spotify_access');
+				url += '&tracks=';
+				tracks.forEach( function(el) {
+					if(!newTracks.includes(el)) {
+						newTracks.push(el);
+						url += el + ',';
+					}
+				});
+
+				$.ajax({
+					type: 'GET',
+					url: url,
+
+					success: function(msg) {
+					       window.location = msg;
+					},
+
+					error: function(jgXHR, textStatus, errorThrown) {
+						console.log('Error: ' + textStatus + ' ' + errorThrown);
+					}
+				});
+
 			}
 
 			function setValue(attr) {
 				var ret = $('input.' + attr).val();
-				if(ret.length == 1) {
+				if(ret == '100') {
+					$('output.' + attr).val(ret);
+					return -1;
+				}
+
+				if(attr == 'pop' || ret.length == 1) {
 					ret += '.';
 				}
 
-				if(ret.length < 4) {
-					while(ret.length != 4) {
-						ret += '0';
-					}
+				while(ret.length < 4) {
+					ret += '0';
 				}
 
 				$('output.' + attr).val(ret);
 			}
 
 			function toggle(attr) {
-				if( $('#' + attr).css('color') == 'rgb(91, 99, 105)') {
+				if($('.checkbox-' + attr).prop('checked')) {
 					$('#' + attr).css('color', '#f48fb1');
 					$('input.' + attr).css('visibility', 'visible');
 					$('output.' + attr).css('visibility', 'visible');
@@ -195,11 +267,16 @@
 			}
 
 			function getSlider(attr, label) {
+				var min = label.min || 0
+				var max = label.max || 1
+				var val = (max-min) / 2
+				var step = (max-min)/100
+
 				var ret = '<div class="slider">';
-				ret += '<input type="checkbox" onclick="toggle(\'' + attr + '\')">';
+				ret += '<input class="checkbox-' + attr + '" type="checkbox" onclick="toggle(\'' + attr + '\')">';
 				ret += '<label class="inactive-text slider-label" id="' + attr + '" for="' + attr + '">' + label.name + '</label>';
-				ret += '<input class="inactive slide ' + attr + '" type="range" min="0" max="1" value="0.5" step="0.01" oninput="setValue(\'' + attr + '\');"></input>';
-				ret += '<output class="inactive slider-value ' + attr + '">0.50</output>';
+				ret += '<input class="inactive slide ' + attr + '" type="range" min="' + min + '" max="' + max + '" value="' + val + '" step="' + step + '" oninput="setValue(\'' + attr + '\');"></input>';
+				ret += '<output class="inactive slider-value ' + attr + '">' + val + '</output>';
 				ret += '</div>';
 
 				return ret;
@@ -239,7 +316,9 @@
 				pop: {
 					name: 'Popularity',
 					desc: '',
-					target: 'popularity'
+					target: 'popularity',
+					min: 0,
+					max: 100
 				},
 
 				speech: {
@@ -278,16 +357,17 @@
 
 			<div class="songlist" id="results"></div>
 
-			<div class="advancedsearch">
-				<button type='button' id="advanced" class='inactive-text btn btn-link' onclick="advMenu()">Advanced</button>
+			<div class="sp-list">
+				<div class="advancedsearch">
+					<button type='button' id="advanced" class='inactive-text btn btn-link' onclick="advMenu()">Advanced</button>
+				</div>
+
+				<div class="advancedmenu"></div>
+				<br>
+
+				<div class="songlist" id="seeds"></div>
+				<button type="button" class="btn btn-secondary thePink" onclick="generateFunction();">Generate</button>
 			</div>
-
-			<div class="advancedmenu"></div>
-			<br>
-
-			<div class="songlist" id="seeds"></div>
-			
-			<button type="button" class="btn btn-secondary thePink" onclick="generateFunction();">Generate</button>
 		</div>
 	</body>
 </html>

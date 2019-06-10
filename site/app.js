@@ -186,9 +186,11 @@ app.get('/recommendations', function(req, res) {
 		tracks = req.query.tracks.split(',');
 		console.log(tracks);
 
-		attr.seed_tracks = '';
+		var seed_tracks = '';
 		tracks.forEach( function(element) {
-			attr.seed_tracks += element + ',';
+			if(element != '') {
+				seed_tracks += element + ',';
+			}
 		});
 	}
 
@@ -209,7 +211,7 @@ app.get('/recommendations', function(req, res) {
 		}
 	});
 
-	spotify.recommendations(attr, access, function(body) {
+	spotify.recommendations(attr, seed_tracks, access, function(body) {
 		res.send(body);
 	});
 });
@@ -223,8 +225,25 @@ app.get('/recommendations', function(req, res) {
  */
 app.get('/search', function(req, res) {
 	spotify.search(req.query.query, req.query.access, function(items) {
-		console.log(items);
 		res.send(items);
+	});
+});
+
+/**
+ * Create a playlist given a set of tracks
+ *
+ * @param  {array} tracks A list of tracks
+ */
+app.get('/playlist', function(req, res) {
+	var tracks = req.query.tracks.split(',').slice(0, -1);
+	var newTracks = [];
+
+	tracks.forEach( function(el) {
+		newTracks.push('spotify:track:' + el);
+	});
+
+	spotify.create(req.query.access, newTracks, function(url) {
+		res.send(url);
 	});
 });
 

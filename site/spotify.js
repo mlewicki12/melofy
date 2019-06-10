@@ -126,9 +126,9 @@ exports.request = function(code, callback) {
  * @param  {string} access   The access key
  * @param  {func}   callback Function to call with the result of the request
  */
-exports.recommendations = function(attr, access, callback) {
+exports.recommendations = function(attr, tracks, access, callback) {
 	this.get('https://api.spotify.com/v1/recommendations?' +
-			queryString.stringify(attr), access, callback);
+			queryString.stringify(attr) + '&seed_tracks=' + tracks, access, callback);
 }
 
 /**
@@ -152,12 +152,71 @@ exports.search = function(query, access, callback) {
 
 /**
  * Get the current user's Spotify profile
+ * 
  * @param {string} access   The access key
  * @param {func}   callback The function to call with user data
  */
 exports.profile = function(access, callback) {
 	this.get('https://api.spotify.com/v1/me', access, function(body) {
 		callback(body);
+	});
+}
+
+/**
+ * Given a set of tracks, create a playlist
+ *
+ * @param {string} access   The access keey
+ * @param {array}  tracks   The set of Spotify URIs
+ * @param {func}   callback Function to call after creating the playlist
+ */
+exports.create = function(access, tracks, callback) {
+	this.profile(access, function(body) {
+		var id = body.id;
+		var url = 'https://api.spotify.com/v1/users/' + id + '/playlists';
+		var authOptions = {
+			url: url,
+			headers: {
+				'Authorization': 'Bearer ' + access,
+				'Content-Type': 'application/json' 
+			},
+			json: {
+				name: 'Melofy Playlist!',
+				description: 'A playlist generated for you by the lads over at Melofy'
+			}
+		};
+		
+		console.log('sending post request to create playlist, url ' + url);
+		request.post(authOptions, function(error, response, body) {
+			if(!error && (response.statusCode === 200 || response.statusCode === 201)) {
+				console.log('successfully created playlist, id ' + body.id);
+				var uri = body.uri;
+				console.log(uri);
+				var playlist_url = 'https://api.spotify.com/v1/playlists/' + body.id + '/tracks';
+				var playlist_options = {
+					url: playlist_url,
+					headers: {
+						'Authorization': 'Bearer ' + access,
+						'Content-Type': 'application/json'
+					},
+					json: {
+						uris: tracks
+					}
+				};
+
+
+				request.post(playlist_options, function(error, response, body) {
+					if(response.statusCode === 201) {
+						console.log('successfully created playlist, sending back ' + uri);
+						callback(uri);
+					} else {
+						callback('./error');
+					}
+				});
+			} else {
+				console.log(body)
+				console.log(response.statusCode);
+			}
+		});
 	});
 }
 
@@ -185,9 +244,9 @@ exports.get = function(url, access, callback) {
 	};
 
 	request.get(options, function(error, response, body) {
-		if(error) {
-			console.log('encountered error: ' + error);
-			console.log(response);
+		if(error || (body.error && body.error.status)) {
+			console.log('error generating playlist')
+			console.log(body);
 			return -1;
 		}
 

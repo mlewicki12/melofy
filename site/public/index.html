@@ -122,26 +122,26 @@
        }
 
        function getQuote()
-	     {
-	       var rawFile = new XMLHttpRequest();
-	       rawFile.open('GET', 'quotes.txt', false);
-	       rawFile.onreadystatechange = function()
-	       {
-		         if(rawFile.readyState === 4)
-		         {
-		             if(rawFile.status === 200 || rawFile.status == 0)
-		             {
-			              var text = rawFile.responseText.split('\n');
-			              var quote = text[Math.floor(Math.random()*text.length)];
-			              $('.quote').text(quote);
-		             }
-		         }
-	       }
-	       rawFile.send(null);
-	      }
+       {
+         var rawFile = new XMLHttpRequest();
+         rawFile.open('GET', 'quotes.txt', false);
+         rawFile.onreadystatechange = function()
+         {
+          	 if(rawFile.readyState === 4)
+          	 {
+          	     if(rawFile.status === 200 || rawFile.status == 0)
+          	     {
+          		      var text = rawFile.responseText.split('\n');
+          		      var quote = text[Math.floor(Math.random()*text.length)];
+          		      $('.quote').text(quote);
+          	     }
+          	 }
+         }
+         rawFile.send(null);
+        }
 
         toggle();
-	      getQuote();
+        getQuote();
 		  
 		 
 
