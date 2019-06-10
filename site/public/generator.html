@@ -33,6 +33,7 @@
 
 			function advMenu(){
 				var url = './sliders.html';
+				console.log("we here");
 				$.ajax({
 					url : url,
 					type : 'GET',
@@ -149,19 +150,28 @@
 			}
 			  
 			function generateFunction(){
-				var URL =  "http://localhost:8080/recommendations";
+				var URL =  "./recommendations";
 
-				var table = document.getElementById("seedsongs");
-				var tracks = "";
-				$('#seedsongs tr').each(function(){
-					$(this).find('td').each(function(){
-						tracks += $(this)[0].innerHTML + ",";
-					});
+				
+
+				console.log("we major");
+				$("#seeds").each(function(){
+					console.log(this.id);
 				});
-
-				URL += "?tracks=" + tracks.substring(0, tracks.length-1);
+			
+				
+				var trackArray = [];
+				$("#seeds.songlist").each(function(){
+					trackArray.push(this.id);
+				});
+				console.log(trackArray);
+				
+				console.log(seeds);
+				URL += "?tracks=";
 				console.log(URL);
-
+				
+				
+				
 				$.ajax({
 					url : URL,
 					type : 'GET',
