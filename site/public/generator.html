@@ -153,11 +153,6 @@
 				var URL =  "./recommendations";
 
 				
-
-				console.log("we major");
-				$("#seeds").each(function(){
-					console.log(this.id);
-				});
 			
 				
 				var trackArray = [];
@@ -176,15 +171,6 @@
 				console.log(URL);
 				
 				
-				
-				$.ajax({
-					url : URL,
-					type : 'GET',
-					datatype : 'html',
-					success : function(data){
-						console.log("recommendations sent");
-					}
-				});
 			}
 
 			function setValue(attr) {
