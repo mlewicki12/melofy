@@ -34,7 +34,6 @@
 .btn {
 	width: 100%;
 	padding: 5px;
-	color: #f48fb1;
 }
 
 body {
@@ -53,7 +52,7 @@ body {
 
 a:active, a:hover {
 	text-decoration: none;
-}	
+}
 
 .search-bar {
 	width: 33.33%;
@@ -64,7 +63,7 @@ a:active, a:hover {
 .song {
 	padding: 5px;
 	margin: 0px;
-	
+
 	display: flex;
 
 	border: 1px solid #f48fb1;
@@ -182,6 +181,6 @@ label {
 }
 
 .inactive-text:hover {
-	
+
 	color: #5b6369;
 }
