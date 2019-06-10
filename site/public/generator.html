@@ -44,12 +44,56 @@
 			'valence'
 			*/
 
-			function toSong(info, cls) {
-				var ret = '<div class="' + cls + '">';
-				ret += '<img src="' + info.album.images[2].url + '" alt="Album Cover"> '
-				ret += info.name + ' - ' + info.artists[0].name;
-				ret += '</div>';
+			function limit(str) {
+				var ret = str;
+				if(str.length > 36) {
+					ret = str.substring(0, 36);
+					ret += '...';
+				}
 
+				return ret;
+			}
+
+			function addSong(info) {
+				$('.search').val('');
+				$('#results').empty();
+
+				var cls = 'song';
+				if($('#seeds').is(':empty')) {
+					cls = 'song top';
+				}
+
+				var ret = songToHtml(info, cls, 'deleteSong(\'' + info.id + '\');');
+				$('#seeds').append(ret);
+			}
+
+			function deleteSong(id) {
+				$('#' + id).remove();
+			}
+
+			function esc(str) {
+				return str.replace("'", "\\'");
+			}
+
+			function toSong(info, cls) {
+				var arg = '{name:\'' + esc(info.name) + 
+				       '\', album:\'' + esc(info.album.name) +
+				       '\', artist:\'' + esc(info.artists[0].name) + 
+				       '\', cover:\'' + esc(info.album.images[2].url) + 
+				       '\', id:\'' + info.id + '\'}'; 
+				
+				var onClick = 'addSong(' + arg + ');';
+				return songToHtml({ name: info.name,
+						    album: info.album.name,
+						    artist: info.artists[0].name,
+						    cover: info.album.images[2].url,
+						    id: info.id }, cls, onClick);
+			}
+
+			function songToHtml(info, cls, onclick) {
+				var ret = '<div id="' + info.id + '" class="' + cls + '" onclick="' + onclick + '">';
+				ret += '<img src="' + info.cover + '" class="album" alt="' + info.album + '"/> ';
+				ret += '<div class="info"><p>' + limit(info.name) + '</p><p>' + limit(info.album) + '</p><p>' + limit(info.artist) + '</p></div>';
 				return ret;
 			}
 
@@ -60,7 +104,10 @@
 			var prev = '';
 			function search(){
 				var search = $('.search').val();
-				if(search.length < 3 || search == prev) {
+				if(search.length < 3 ) {
+					$('#results').empty();
+					return -1;
+				} else if(search == prev) {
 					return -1;
 				}
 
@@ -75,14 +122,14 @@
 
 					success: function(msg) {
 						console.log(msg)
-						$('.songlist').empty();
+						$('#results').empty();
 						for(var i = 0; i < msg.length; ++i) {
 							var cls = 'song';
 							if(i == msg.length - 1) {
 								cls = 'bottom song';
 							}
 
-						$('.songlist').append(toSong(msg[i], cls));
+						$('#results').append(toSong(msg[i], cls));
 						}
 					},
 
@@ -90,19 +137,6 @@
 						console.log('Error: ' + textStates + ' ' + errorThrown);
 					}
 				});
-			}
-
-			var access, refresh;
-			function getCookies() {
-				if(Cookies.get('access')) {
-					console.log("access is: " + Cookies.get('access'));
-					access = Cookies.get('access');
-				}
-
-				if(Cookies.get('refresh')) {
-					console.log("refresh is: " + Cookies.get('refresh'));
-					refresh = Cookies.get('refresh');
-				}
 			}
 			  
 			function generateFunction(){
@@ -143,19 +177,20 @@
 				<input class="search form-control" type="text" placeholder="Search" aria-label="Search" onfocus="initSearch(1)" onfocusout="initSearch(2)">
 			</div>
 
-			<div class="songlist"></div>
+			<div class="songlist" id="results"></div>
 
 			<div class="advancedsearch">
 				<button type='button' class='btn btn-link' onclick="advMenu()">Advanced</button>
 			</div>
 
 			<div class="advancedmenu"></div>
+			<br>
+
+			<div class="songlist" id="seeds"></div>
+
+			<br>
+
+			<button type="button" class="btn btn-secondary thePink" onclick="generateFunction();">Generate</button>
 		</div>
-
-		<div id="seedsongs"></div>
-
-		<br>
-
-		<button type="button" class="btn btn-secondary thePink" onclick="generateFunction();">Generate</button>
 	</body>
 </html>
