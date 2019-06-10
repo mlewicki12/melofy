@@ -231,6 +231,7 @@ exports.create = function(access, tracks, callback) {
 exports.get = function(url, access, callback) {
 	if(!access) {
 		console.log('invalid access token, user needs to login first')
+		callback({error: 'invalid access token'});
 		return -1;
 	}
 
@@ -246,7 +247,7 @@ exports.get = function(url, access, callback) {
 	request.get(options, function(error, response, body) {
 		if(error || (body.error && body.error.status)) {
 			console.log('error generating playlist')
-			console.log(body);
+			callback(body);
 			return -1;
 		}
 
