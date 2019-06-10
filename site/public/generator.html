@@ -32,9 +32,18 @@
 			}
 
 			function advMenu(){
-				$('.advancedmenu').html("");
-				$('.advancedmenu').append("<label for='range1' style='color: #f48fb1'>Range1: &nbsp;&nbsp;&nbsp;</label>");
-				$('.advancedmenu').append("<input type='range' class='custom-range' min='0' max='1' step='0.01' id='range1'>");
+				var url = './sliders.html';
+				$.ajax({
+					url : url,
+					type : 'GET',
+					datatype : 'html',
+					success : function(data){
+						document.getElementById('advancedmenu').innerHTML = data;
+				
+					}
+				});
+				
+				
 			}
 
 			/*'acousticness', 'danceability',
