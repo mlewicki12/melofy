@@ -32,17 +32,17 @@
 			}
 
 			function advMenu(){
-				$('.advancedmenu').html("");
-				$('.advancedmenu').append("<label for='Acousticness' style='color: #f48fb1'>Acousticness: &nbsp;&nbsp;&nbsp;</label>");
-				$('.advancedmenu').append("<input type='range' class='custom-range' min='0' max='1' step='0.01' id='range1'><br>");
-				$('.advancedmenu').append("<label for='Danceability' style='color: #f48fb1'>Danceability: &nbsp;&nbsp;&nbsp;</label>");
-				$('.advancedmenu').append("<input type='range' class='custom-range' min='0' max='1' step='0.01' id='range1'><br>");
-				$('.advancedmenu').append("<label for='Duration (ms)' style='color: #f48fb1'>Duration (ms): &nbsp;&nbsp;&nbsp;</label>");
-				$('.advancedmenu').append("<input type='range' class='custom-range' min='0' max='1' step='0.01' id='range1'><br>");
-				$('.advancedmenu').append("<label for='Energy' style='color: #f48fb1'>Energy: &nbsp;&nbsp;&nbsp;</label>");
-				$('.advancedmenu').append("<input type='range' class='custom-range' min='0' max='1' step='0.01' id='range1'><br>");
-				$('.advancedmenu').append("<label for='Instrumentalness' style='color: #f48fb1'>Instrumentalness: &nbsp;&nbsp;&nbsp;</label>");
-				$('.advancedmenu').append("<input type='range' class='custom-range' min='0' max='1' step='0.01' id='range1'><br>");
+				var url = './sliders.html';
+				$.ajax({
+					url : url,
+					type : 'GET',
+					datatype : 'html',
+					success : function(data){
+						document.getElementById('advancedmenu').innerHTML = data;
+				
+					}
+				});
+				
 				
 			}
 
