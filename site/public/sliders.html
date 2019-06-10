@@ -1,29 +1,99 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<style>
+.slider {
+	display: flex;
+	align-items: baseline;
+	padding: 5px;
+}
 
+.slider > * {
+	margin: 5px;
+}
+
+.slide {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 10px;
+  background: #000000;
+  outline: none;
+  opacity: 0.7;
+  -webkit-transition: .2s;
+  transition: opacity .2s;
+}
+
+.slide:hover {
+  opacity: 1;
+}
+
+.slide::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  border: 0;
+  width: 25px;
+  height: 25px;
+  background: #f48fb1;
+  cursor: pointer;
+}
+
+.slide::-moz-range-thumb {
+  border: 0;
+  width: 25px;
+  height: 25px;
+  background: #f48fb1;
+  cursor: pointer;
+}
+
+.slider-value {
+	color: #f48fb1;
+}
+
+label {
+	margin-right: 5px;
+}
+</style>
+<script>
+	function setValue(attr) {
+		var ret = $('input.' + attr).val();
+		if(ret.length == 1) {
+			ret += '.';
+		}
+
+		if(ret.length < 4) {
+			while(ret.length != 4) {
+				ret += '0';
+			}
+		}
+
+		$('output.' + attr).val(ret);
+	}
+</script>
  
 </head>
 <body>
  
-<label for="acousticness" style='color: #f48fb1' >Acousticness</label>
-<input id="acousticness" type="range" min="0" max="1" value="0.5" step='0.1' onchange="acousticvalue.value=value"></input>
-<output id="acousticvalue">0.5</output>
+<div class="slider">
+<input type="checkbox" id="myCheck" onclick="myFunction()">
+<label for="acoustic" style='color: #f48fb1' >Acousticness</label>
+<input class="slide acoustic" type="range" min="0" max="1" value="0.5" step='0.01' oninput="setValue('acoustic');"></input>
+<output class="slider-value acoustic" id="acoustic">0.5</output>
+</div>
 <br>
 
-<label for="danceability" style='color: #f48fb1' >Danceability</label>
-<input id="danceability" type="range" min="0" max="1" value="0.5" step='0.1' onchange="dancevalue.value=value"></input>
-<output id="dancevalue">0.5</output>
+<div class="slider">
+<label for="dance" style='color: #f48fb1' >Danceability</label>
+<input class="slide dance" id="dance" type="range" min="0" max="1" value="0.5" step='0.01' oninput="setValue('dance');"></input>
+<output class="slider-value dance" id="dance">0.5</output>
+</div>
 <br>
 
-<label for="duration" style='color: #f48fb1' >Duration (ms)</label>
-<input id="duration" type="range" min="0" max="1" value="0.5" step='0.1' onchange="durationvalue.value=value"></input>
-<output id="durationvalue">0.5</output>
-<br>
-
+<div class="slider">
 <label for="energy" style='color: #f48fb1' >Energy</label>
-<input id="energy" type="range" min="0" max="1" value="0.5" step='0.1' onchange="energyvalue.value=value"></input>
-<output id="energyvalue">0.5</output>
+<input class="slide energy" id="energy" type="range" min="0" max="1" value="0.5" step='0.01' oninput="setValue('energy')"></input>
+<output class="slider-value energy" id="energy">0.5</output>
+</div>
 <br>
  
 </body>
