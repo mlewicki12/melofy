@@ -146,33 +146,24 @@
 			  
 			function generateFunction(){
 				var URL =  "./recommendations";
-
-				console.log("we major");
-				$("#seeds").each(function(){
-					console.log(this.id);
-				});
-			
-				
 				var trackArray = [];
-				$("#seeds.songlist").each(function(){
+				$("#seeds.songlist").find(".song").each(function(){
 					trackArray.push(this.id);
 				});
-				console.log(trackArray);
 				
-				console.log(seeds);
+				var keys = ['acousticness', 'danceability', 'energy', 'instrumentalness','liveness', 
+				'popularity', 'speechiness', 'tempo', 'valence'];		
+				
 				URL += "?tracks=";
+				var track;
+				for(track in trackArray){
+					URL += trackArray[track] + ",";
+				}
+							
+				URL = URL.substring(0, URL.length - 1);
 				console.log(URL);
 				
 				
-				
-				$.ajax({
-					url : URL,
-					type : 'GET',
-					datatype : 'html',
-					success : function(data){
-						console.log("recommendations sent");
-					}
-				});
 			}
 
 			function setValue(attr) {
