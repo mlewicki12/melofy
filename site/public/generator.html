@@ -160,14 +160,22 @@
 					trackArray.push(this.id);
 				});
 				
-				
+				var keys = ['acousticness', 'danceability', 'energy', 'instrumentalness','liveness', 
+				'popularity', 'speechiness', 'tempo', 'valence'];		
 				
 				URL += "?tracks=";
 				var track;
 				for(track in trackArray){
 					URL += trackArray[track] + ",";
 				}
+							
 				URL = URL.substring(0, URL.length - 1);
+				
+				for(key in keys){
+					var slideValue = $(".slide " + keys[key]).slider("option","value");
+					console.log(slideValue);
+				
+				}
 				console.log(URL);
 				
 				
