@@ -269,12 +269,12 @@
 			function getSlider(attr, label) {
 				var min = label.min || 0
 				var max = label.max || 1
-				var val = (max-min) / 2
-				var step = (max-min)/100
+				var val = label.val || ((max-min) / 2);
+				var step = label.step || ((max-min)/100);
 
 				var ret = '<div class="slider">';
 				ret += '<input class="checkbox-' + attr + '" type="checkbox" onclick="toggle(\'' + attr + '\')">';
-				ret += '<label class="inactive-text slider-label" id="' + attr + '" for="' + attr + '">' + label.name + '</label>';
+				ret += '<label title="' + label.desc + ' " class="inactive-text slider-label" id="' + attr + '" for="' + attr + '">' + label.name + '</label>';
 				ret += '<input class="inactive slide ' + attr + '" type="range" min="' + min + '" max="' + max + '" value="' + val + '" step="' + step + '" oninput="setValue(\'' + attr + '\');"></input>';
 				ret += '<output class="inactive slider-value ' + attr + '">' + val + '</output>';
 				ret += '</div>';
@@ -285,37 +285,37 @@
 			var attributes = {
 				acoustic: {
 					name: 'Acousticness',
-					desc: '',
+					desc: 'How acoustic the songs will be',
 					target: 'acousticness'
 				},
 
 				dance: {
 					name: 'Danceability',
-					desc: '',
+					desc: 'So you don\'t dance to Joy Division',
 					target: 'danceability'
 				},
 
 				energy: {
 					name: 'Energy',
-					desc: '',
+					desc: 'How energetic you want the songs to be',
 					target: 'energy'
 				},
 
 				instrument: {
 					name: 'Instrumentalness',
-					desc: '',
+					desc: 'How instrumental the songs should be',
 					target: 'instrumentalness'
 				},
 
 				live: {
 					name: 'Liveness',
-					desc: '',
+					desc: 'How live the songs should be',
 					target: 'liveness'
 				},
 
 				pop: {
 					name: 'Popularity',
-					desc: '',
+					desc: 'How popular the songs should be',
 					target: 'popularity',
 					min: 0,
 					max: 100
@@ -323,16 +323,15 @@
 
 				speech: {
 					name: 'Speechiness',
-					desc: '',
+					desc: 'How much talking you want in your songs',
 					target: 'speechiness'
 				},
 
 				valence: {
 					name: 'Valence',
-					desc: '',
+					desc: 'Pick 0 if you want to cry',
 					target: 'valence'
 				}
-
 			}
 
 			$(document).ready( function() {
