@@ -152,11 +152,11 @@
 			function generateFunction(){
 				console.log("here");
 				var URL =  "./recommendations";
-				console.log("machik vs noodle");
-				$("#seeds").each(function(){
-					console.log(this.id);
-				});
-				console.log(seeds);
+				
+				var tracks = $('#seeds .song').map(function() {
+					return $(this).attr('.songlist');
+				}).get();
+				
 				URL += "?tracks=";
 				console.log(URL);
 
