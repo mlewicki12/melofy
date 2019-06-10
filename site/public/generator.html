@@ -154,10 +154,8 @@
 
 				var table = document.getElementById("seedsongs");
 				var tracks = "";
-				$('#seedsongs tr').each(function(){
-					$(this).find('td').each(function(){
-						tracks += $(this)[0].innerHTML + ",";
-					});
+				$('.songlist').each(function(i, obj){
+					console.log(obj);
 				});
 
 				URL += "?tracks=" + tracks.substring(0, tracks.length-1);
