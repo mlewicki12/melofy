@@ -152,12 +152,19 @@
 			function generateFunction(){
 				console.log("here");
 				var URL =  "./recommendations";
+
 				
 				$(.song).each(function() {
 					var current = $(this);
 					console.log(current);
 				});
 				
+
+				console.log("machik vs noodle");
+				$("#seeds").each(function(){
+					console.log(this.id);
+				});
+				console.log(seeds);
 				URL += "?tracks=";
 				console.log(URL);
 
