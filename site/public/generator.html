@@ -153,9 +153,10 @@
 				console.log("here");
 				var URL =  "./recommendations";
 				
-				var tracks = $('#seeds .song').map(function() {
-					return $(this).attr('.songlist');
-				}).get();
+				$(.song).each(function() {
+					var current = $(this);
+					console.log(current);
+				});
 				
 				URL += "?tracks=";
 				console.log(URL);
