@@ -105,3 +105,60 @@ a:active, a:hover {
 	margin: auto;
 	background-color: #f48fb1;
 }
+
+.slider {
+	display: flex;
+	align-items: baseline;
+	justify-content: space-between;
+	padding: 5px;
+}
+
+.slider > * {
+	margin: 5px;
+}
+
+.slider-label {
+	color: #f48fb1;
+}
+
+.slide {
+  -webkit-appearance: none;
+  max-width: 50%;
+  height: 10px;
+  background: #000000;
+  outline: none;
+  opacity: 0.7;
+  -webkit-transition: .2s;
+  transition: opacity .2s;
+}
+
+.slide:hover {
+  opacity: 1;
+}
+
+.slide::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  border: 0;
+  width: 25px;
+  height: 25px;
+  background: #f48fb1;
+  cursor: pointer;
+}
+
+.slide::-moz-range-thumb {
+  border: 0;
+  width: 25px;
+  height: 25px;
+  background: #f48fb1;
+  cursor: pointer;
+}
+
+.slider-value {
+	color: #f48fb1;
+}
+
+label {
+	flex-grow: 1;
+	margin-left: auto;
+}

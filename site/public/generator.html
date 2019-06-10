@@ -180,6 +180,47 @@
 					}
 				});
 			}
+
+			function setValue(attr) {
+				var ret = $('input.' + attr).val();
+				if(ret.length == 1) {
+					ret += '.';
+				}
+
+				if(ret.length < 4) {
+					while(ret.length != 4) {
+						ret += '0';
+					}
+				}
+
+				$('output.' + attr).val(ret);
+			}
+
+			function getSlider(attr, label) {
+				var ret = '<div class="slider">';
+				ret += '<label class="slider-label" for="' + attr + '">' + label + '</label>';
+				ret += '<input class="slide ' + attr + '" type="range" min="0" max="1" value="0.5" step="0.01" oninput="setValue(\'' + attr + '\');"></input>';
+				ret += '<output class="slider-value ' + attr + '">0.50</output>';
+				ret += '</div>';
+
+				return ret;
+			}
+
+			$(document).ready( function() {
+				var keys = ['acoustic', 'Acousticness',
+					    'dance', 'Danceability',
+					    'energy', 'Energy',
+					    'instrument', 'Instrumentalness',
+					    'live', 'Liveness',
+					    'pop', 'Popularity',
+					    'speechiness', 'Speechiness',
+					    'tempo', 'Tempo',
+					    'valence', 'Valence'];
+
+				for(var i = 0; i < keys.length; i += 2) {
+					$('.advancedmenu').append( getSlider(keys[i], keys[i+1]));
+				}
+			});
 		</script>
 	</head>
 
@@ -201,12 +242,13 @@
 				<button type='button' class='btn btn-link' onclick="advMenu()">Advanced</button>
 			</div>
 
-			<div class="advancedmenu"></div>
+			<div class="advancedmenu">
+				
+			</div>
 			<br>
 
 			<div class="songlist" id="seeds"></div>
 
-			<br>
 
 			<button type="button" class="btn btn-secondary thePink" onclick="generateFunction();">Generate</button>
 		</div>
