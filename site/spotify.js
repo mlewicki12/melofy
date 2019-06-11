@@ -146,7 +146,12 @@ exports.search = function(query, access, callback) {
 				type: 'track',
 				limit: 10
 			}), access, function(body) {
-				callback(body.tracks.items);
+				if(body && body.tracks && body.tracks.items) {
+					callback(body.tracks.items);
+				} else {
+					console.log(body);
+					callback({error: 'error'});
+				}
 			});
 }
 

@@ -180,7 +180,6 @@ app.get('/recommendations', function(req, res) {
 		limit: 20
 	};
 
-	// still need to read through artists, tracks, and genres to ensure only five at a time are sent
 	var tracks = [];
 	if(req.query.tracks) {
 		tracks = req.query.tracks.split(',');

@@ -23,7 +23,7 @@
 
 			function initSearch(state) {
 				if (state == 1) {
-					interval = setInterval(search, 500);
+					interval = setInterval(search, 250);
 				} else {
 					clearInterval(interval);
 					interval = null;
@@ -126,7 +126,16 @@
 					dataType: 'json',
 
 					success: function(msg) {
+					     	if(msg.error) {
+						  alert('error while searching for songs!');
+				 		  return -1;	     
+					        }
+
 						$('#results').empty();
+						if(msg.length <= 3) {
+							$('.sp-list').css('display', 'block');
+						} else  $('.sp-list').css('display', 'none');
+
 						for(var i = 0; i < msg.length; ++i) {
 							var cls = 'song';
 							if(i == msg.length - 1) {
@@ -134,7 +143,6 @@
 							}
 
 							$('#results').append(toSong(msg[i], cls));
-							$('.sp-list').css('display', 'none');
 						}
 					},
 
@@ -161,7 +169,12 @@
 					     tracks.push(this.id);
 				});
 
-				var calls = Math.min(5, Math.floor(tracks.length / 5) + 1);
+				if(tracks.length == 0) {
+					alert('pick seed tracks first!');
+					return -1;
+				}
+
+				var calls = Math.min(5, Math.floor((tracks.length - 1) / 5) + 1);
 				var url_save = URL;
 				var received_tracks = [];
 				for(var i = 0; i < calls; ++i) {

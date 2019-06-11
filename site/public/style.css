@@ -34,7 +34,11 @@
 .btn {
 	width: 100%;
 	padding: 5px;
-	margin: 5px;
+}
+
+.row {
+	display: flex;
+	justify-content: center;
 }
 
 body {
@@ -78,6 +82,12 @@ a:active, a:hover {
 
 .songlist {
 	margin-bottom: 5px;
+}
+
+.sp-list {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
 }
 
 .album {
