@@ -250,15 +250,17 @@ exports.get = function(url, access, callback) {
 	};
 
 	request.get(options, function(error, response, body) {
-		if(error || (body.error && body.error.status)) {
+		if(error || (body && body.error && body.error.status)) {
 			console.log('error generating playlist')
 			callback(body);
 			return -1;
 		}
 
-		console.log('received response');
-		console.log(body);
+		if(response.statusCode === 200 || response.statusCode === 201){
+			console.log('received response');
+			console.log(body);
 
-		callback(body);
+			callback(body);
+		}
 	});
 }

@@ -55,6 +55,7 @@
 				$('.search').val('');
 				$('#results').empty();
 				$('.sp-list').css('display', 'block');
+				clearInterval(interval);
 
 				var cls = 'song';
 				if($('#seeds').is(':empty')) {
