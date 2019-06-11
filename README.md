@@ -1,4 +1,4 @@
 
 # CS275 Project Homepage
 
-This might have content soon
+Now hosted at melofy.cleverapps.io!
