@@ -240,7 +240,8 @@
 					url: url,
 
 					success: function(msg) {
-					       window.location = msg;
+						clear();
+					       	window.location = msg;
 					},
 
 					error: function(jgXHR, textStatus, errorThrown) {
@@ -353,6 +354,12 @@
 					$('.advancedmenu').append( getSlider(element, attributes[element]));
 				});
 			});
+
+			function clear() {
+				$('.songlist').empty();
+				$('#advanced').css('color', '#5b6369');
+				$('.advancedmenu').css('display', 'none');
+			}
 
 			function getQuote()
 			{
