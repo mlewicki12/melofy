@@ -177,6 +177,7 @@
 
 				var calls = Math.min(5, Math.floor((tracks.length - 1) / 5) + 1);
 				var url_save = URL;
+				var totalCalls = 0;
 				var received_tracks = [];
 				for(var i = 0; i < calls; ++i) {
 					URL += '&tracks=';
@@ -193,12 +194,19 @@
 						msg.tracks.forEach(function(element) {
 							received_tracks.push(element.id);
 						});
+
+					     	totalCalls += 1;
 					}
 
 					var lastsucc = function(msg) {
 						msg.tracks.forEach(function(element) {
 							received_tracks.push(element.id);
 						});
+
+					     	totalCalls += 1;
+					        while(totalCalls != calls) {
+							// make sure all calls have been made
+					     	}
 
 						processPlaylist(received_tracks);
 					}
