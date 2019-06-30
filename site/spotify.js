@@ -186,7 +186,7 @@ exports.create = function(access, tracks, callback) {
 			},
 			json: {
 				name: 'Melofy Playlist!',
-				description: 'A playlist generated for you by the lads over at Melofy'
+				description: 'A playlist generated for you by the lads over at Melofy! Create more at melofy.cleverapps.io!'
 			}
 		};
 		
